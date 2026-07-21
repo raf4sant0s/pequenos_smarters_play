@@ -1,6 +1,6 @@
 // src/screens/MapScreen.js
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { cores } from '../utils/cores';
 
 // As ilhas do jogo. A "rota" é o nome que a Pessoa B vai registrar no AppNavigator.
@@ -15,10 +15,7 @@ const ILHAS = [
 
 export default function MapScreen({ navigation }) {
   function abrirIlha(rota) {
-    // Enquanto a Pessoa B (Estefanie) não criou as ilhas, mostramos um aviso.
-    // Quando a ilha existir E estiver registrada no AppNavigator, troque a
-    // linha abaixo por:  navigation.navigate(rota);
-    Alert.alert('Em construção 🚧', 'Esta ilha será criada na Parte 6 (trilha do Jogo).');
+    navigation.navigate(rota);
   }
 
   return (

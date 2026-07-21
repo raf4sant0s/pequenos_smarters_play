@@ -17,37 +17,33 @@ import ResultScreen from '../screens/ResultScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import ParentsScreen from '../screens/ParentsScreen';
 
-// ============================================================================
-// ILHAS E FASES (Pessoa B — Parte 6). Conforme a Estefanie for criando cada
-// arquivo, descomente o import aqui em cima E o <Stack.Screen> lá embaixo.
-// Os nomes seguem o "contrato" da Parte 2.4 (NomeIlhaFaseNúmero).
-// ----------------------------------------------------------------------------
-// import NaturezaScreen from '../screens/islands/NaturezaScreen';
-// import DesertoScreen from '../screens/islands/DesertoScreen';
-// import GeloScreen from '../screens/islands/GeloScreen';
-// import VentosScreen from '../screens/islands/VentosScreen';
-// import FogoScreen from '../screens/islands/FogoScreen';
-// import LagosScreen from '../screens/islands/LagosScreen';
-//
-// import NaturezaFase1 from '../game/fases/NaturezaFase1';
-// import NaturezaFase2 from '../game/fases/NaturezaFase2';
-// import NaturezaFase3 from '../game/fases/NaturezaFase3';
-// import DesertoFase1 from '../game/fases/DesertoFase1';
-// import DesertoFase2 from '../game/fases/DesertoFase2';
-// import DesertoFase3 from '../game/fases/DesertoFase3';
-// import GeloFase1 from '../game/fases/GeloFase1';
-// import GeloFase2 from '../game/fases/GeloFase2';
-// import GeloFase3 from '../game/fases/GeloFase3';
-// import VentosFase1 from '../game/fases/VentosFase1';
-// import VentosFase2 from '../game/fases/VentosFase2';
-// import VentosFase3 from '../game/fases/VentosFase3';
-// import FogoFase1 from '../game/fases/FogoFase1';
-// import FogoFase2 from '../game/fases/FogoFase2';
-// import FogoFase3 from '../game/fases/FogoFase3';
-// import LagosFase1 from '../game/fases/LagosFase1';
-// import LagosFase2 from '../game/fases/LagosFase2';
-// import LagosFase3 from '../game/fases/LagosFase3';
-// ============================================================================
+// Telas das ilhas (Pessoa B)
+import NaturezaScreen from '../screens/islands/NaturezaScreen';
+import DesertoScreen from '../screens/islands/DesertoScreen';
+import GeloScreen from '../screens/islands/GeloScreen';
+import VentosScreen from '../screens/islands/VentosScreen';
+import FogoScreen from '../screens/islands/FogoScreen';
+import LagosScreen from '../screens/islands/LagosScreen';
+
+// Fases (Pessoa B) — nomes seguem o "contrato" da Parte 2.4
+import NaturezaFase1 from '../game/fases/NaturezaFase1';
+import NaturezaFase2 from '../game/fases/NaturezaFase2';
+import NaturezaFase3 from '../game/fases/NaturezaFase3';
+import DesertoFase1 from '../game/fases/DesertoFase1';
+import DesertoFase2 from '../game/fases/DesertoFase2';
+import DesertoFase3 from '../game/fases/DesertoFase3';
+import GeloFase1 from '../game/fases/GeloFase1';
+import GeloFase2 from '../game/fases/GeloFase2';
+import GeloFase3 from '../game/fases/GeloFase3';
+import VentosFase1 from '../game/fases/VentosFase1';
+import VentosFase2 from '../game/fases/VentosFase2';
+import VentosFase3 from '../game/fases/VentosFase3';
+import FogoFase1 from '../game/fases/FogoFase1';
+import FogoFase2 from '../game/fases/FogoFase2';
+import FogoFase3 from '../game/fases/FogoFase3';
+import LagosFase1 from '../game/fases/LagosFase1';
+import LagosFase2 from '../game/fases/LagosFase2';
+import LagosFase3 from '../game/fases/LagosFase3';
 
 const Stack = createStackNavigator();
 
@@ -74,7 +70,6 @@ export default function AppNavigator() {
             <Stack.Screen name="Settings" component={SettingsScreen} />
             <Stack.Screen name="Parents" component={ParentsScreen} />
 
-            {/* ===== ILHAS E FASES (Pessoa B) — descomente conforme criar =====
             <Stack.Screen name="Natureza" component={NaturezaScreen} />
             <Stack.Screen name="Deserto" component={DesertoScreen} />
             <Stack.Screen name="Gelo" component={GeloScreen} />
@@ -100,7 +95,6 @@ export default function AppNavigator() {
             <Stack.Screen name="LagosFase1" component={LagosFase1} />
             <Stack.Screen name="LagosFase2" component={LagosFase2} />
             <Stack.Screen name="LagosFase3" component={LagosFase3} />
-            ================================================================ */}
           </>
         ) : (
           // ===== DESLOGADO: mostra a entrada =====

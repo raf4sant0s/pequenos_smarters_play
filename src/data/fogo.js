@@ -1,17 +1,20 @@
 // src/data/fogo.js
+import GatoDorme from '../../assets/images/frases/gato_dorme.svg';
+import GatoCorre from '../../assets/images/frases/gato_corre.svg';
+import GatoCome from '../../assets/images/frases/gato_come.svg';
+
+// As 3 opções de imagem são sempre as mesmas; muda a frase e a correta.
+const OPCOES_GATO = [
+  { id: 'dorme', Imagem: GatoDorme },
+  { id: 'corre', Imagem: GatoCorre },
+  { id: 'come', Imagem: GatoCome },
+];
 
 // Fase 1 — Vulcão Misterioso (SelecaoUnica com imagens): frase -> imagem
 export const vulcao = [
-  {
-    enunciado: 'O gato dorme.',
-    opcoes: [
-      { id: 'certa', imagem: require('../../assets/images/frases/gato_dorme.png') },
-      { id: 'b', imagem: require('../../assets/images/frases/gato_corre.png') },
-      { id: 'c', imagem: require('../../assets/images/frases/gato_come.png') },
-    ],
-    correta: 'certa',
-  },
-  // repita para: "A bola é vermelha.", "O menino lê.", "A casa é grande.", "O pato nada."
+  { enunciado: 'O gato dorme.', opcoes: OPCOES_GATO, correta: 'dorme' },
+  { enunciado: 'O gato corre.', opcoes: OPCOES_GATO, correta: 'corre' },
+  { enunciado: 'O gato come.', opcoes: OPCOES_GATO, correta: 'come' },
 ];
 
 // Fase 2 — Piscina Vulcânica (SelecaoUnica): complete a frase com a palavra

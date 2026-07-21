@@ -13,7 +13,7 @@ export default function LigarColunas({ rodadas, onConcluir }) {
 
   const frases = rodada.pares.map((p, idx) => ({ frase: p.frase, idx }));
   const imagens = useMemo(
-    () => embaralhar(rodada.pares.map((p, idx) => ({ imagem: p.imagem, idx }))),
+    () => embaralhar(rodada.pares.map((p, idx) => ({ Imagem: p.Imagem, idx }))),
     [i]
   );
 
@@ -63,7 +63,7 @@ export default function LigarColunas({ rodadas, onConcluir }) {
               style={[styles.imgBox, ligados.includes(im.idx) && styles.ligado]}
               onPress={() => tocarImagem(im.idx)}
             >
-              <Image source={im.imagem} style={styles.img} />
+              <im.Imagem width={80} height={80} />
             </TouchableOpacity>
           ))}
         </View>

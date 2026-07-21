@@ -1,18 +1,24 @@
 // src/data/ventos.js
+// Imagens vetoriais (SVG) — viram componentes graças ao react-native-svg-transformer
+import Gato from '../../assets/images/palavras/gato.svg';
+import Bola from '../../assets/images/palavras/bola.svg';
+import Casa from '../../assets/images/palavras/casa.svg';
+import Pato from '../../assets/images/palavras/pato.svg';
+
+// As 4 opções de imagem são sempre as mesmas; muda só a palavra pedida e a correta.
+const OPCOES_PALAVRAS = [
+  { id: 'gato', Imagem: Gato },
+  { id: 'bola', Imagem: Bola },
+  { id: 'casa', Imagem: Casa },
+  { id: 'pato', Imagem: Pato },
+];
 
 // Fase 1 — Árvore dos Pensamentos (SelecaoUnica com imagens): palavra -> imagem
 export const arvorePensamentos = [
-  {
-    enunciado: 'GATO',
-    opcoes: [
-      { id: 'gato', imagem: require('../../assets/images/palavras/gato.png') },
-      { id: 'bola', imagem: require('../../assets/images/palavras/bola.png') },
-      { id: 'casa', imagem: require('../../assets/images/palavras/casa.png') },
-      { id: 'pato', imagem: require('../../assets/images/palavras/pato.png') },
-    ],
-    correta: 'gato',
-  },
-  // repita para BOLA, CASA, PATO, MESA trocando o enunciado e o "correta"
+  { enunciado: 'GATO', opcoes: OPCOES_PALAVRAS, correta: 'gato' },
+  { enunciado: 'BOLA', opcoes: OPCOES_PALAVRAS, correta: 'bola' },
+  { enunciado: 'CASA', opcoes: OPCOES_PALAVRAS, correta: 'casa' },
+  { enunciado: 'PATO', opcoes: OPCOES_PALAVRAS, correta: 'pato' },
 ];
 
 // Fase 2 — Ventos da Sabedoria (SelecaoUnica): complete com a sílaba

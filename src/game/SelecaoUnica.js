@@ -47,7 +47,9 @@ export default function SelecaoUnica({ instrucao, rodadas, onConcluir }) {
               style={[styles.opcao, { backgroundColor: cor }]}
               onPress={() => escolher(op.id)}
             >
-              {op.imagem
+              {op.Imagem
+                ? <op.Imagem width={90} height={90} />
+                : op.imagem
                 ? <Image source={op.imagem} style={styles.img} />
                 : <Text style={styles.opcaoTexto}>{op.texto}</Text>}
             </TouchableOpacity>
