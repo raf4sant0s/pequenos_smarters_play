@@ -1,8 +1,12 @@
-// src/screens/LoginScreen.js
+// src/screens/LoginScreen.js — login (horizontal)
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, Alert, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import Fundo from '../components/Fundo';
 import { entrar } from '../services/auth';
 import { cores } from '../utils/cores';
+import { fontes } from '../utils/tema';
+
+const LOGO = require('../../assets/images/logo.png');
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -11,48 +15,60 @@ export default function LoginScreen({ navigation }) {
   async function handleLogin() {
     try {
       await entrar(email, senha);
-      // Não precisa navegar! O AuthContext troca de tela sozinho.
+      // O AuthContext troca de tela sozinho ao logar.
     } catch (erro) {
       Alert.alert('Ops', 'Email ou senha incorretos.');
     }
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.titulo}>Entrar</Text>
+    <Fundo>
+      <Image source={LOGO} style={styles.logoTopo} resizeMode="contain" />
+      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
+          <View style={styles.form}>
+            <Text style={styles.titulo}>LOGIN</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="E-mail"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        value={senha}
-        onChangeText={setSenha}
-        secureTextEntry
-      />
+            <View style={styles.inputBox}>
+              <Text style={styles.icone}>✉️</Text>
+              <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#9BB8CC"
+                value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" />
+            </View>
 
-      <TouchableOpacity style={styles.botao} onPress={handleLogin}>
-        <Text style={styles.botaoTexto}>ENTRAR</Text>
-      </TouchableOpacity>
+            <View style={styles.inputBox}>
+              <Text style={styles.icone}>🔒</Text>
+              <TextInput style={styles.input} placeholder="Senha" placeholderTextColor="#9BB8CC"
+                value={senha} onChangeText={setSenha} secureTextEntry />
+            </View>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Cadastro')}>
-        <Text style={styles.link}>Não tem conta? Criar conta</Text>
-      </TouchableOpacity>
-    </View>
+            <TouchableOpacity style={styles.btnEntrar} onPress={handleLogin} activeOpacity={0.85}>
+              <Text style={styles.btnEntrarTexto}>ENTRAR</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.ou}>ou</Text>
+
+            <TouchableOpacity style={styles.btnCadastro} onPress={() => navigation.navigate('Cadastro')} activeOpacity={0.85}>
+              <Text style={styles.btnCadastroTexto}>CADASTRE-SE</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </Fundo>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#EAF3FB', justifyContent: 'center', padding: 24 },
-  titulo: { fontSize: 28, fontWeight: 'bold', color: cores.azul, marginBottom: 24, textAlign: 'center' },
-  input: { backgroundColor: cores.branco, borderRadius: 12, padding: 14, fontSize: 16, marginBottom: 14, borderWidth: 1, borderColor: '#ccc' },
-  botao: { backgroundColor: cores.laranja, paddingVertical: 14, borderRadius: 16, marginTop: 6 },
-  botaoTexto: { color: cores.branco, textAlign: 'center', fontWeight: 'bold', fontSize: 16 },
-  link: { color: cores.azul, textAlign: 'center', marginTop: 18, fontWeight: 'bold' },
+  flex: { flex: 1 },
+  logoTopo: { position: 'absolute', top: 14, left: 16, width: 150, height: 48, zIndex: 10 },
+  scroll: { flexGrow: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 20 },
+  form: { width: 380, maxWidth: '86%', alignItems: 'center' },
+  titulo: { fontFamily: fontes.titulo, fontSize: 40, color: cores.azul, marginBottom: 16, textShadowColor: cores.branco, textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 1 },
+  inputBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: cores.branco, borderRadius: 26, paddingHorizontal: 18, height: 50, width: '100%', marginBottom: 12 },
+  icone: { fontSize: 18, marginRight: 10 },
+  input: { flex: 1, fontFamily: fontes.texto, fontSize: 16, color: cores.texto },
+  btnEntrar: { backgroundColor: cores.azulBotao, borderRadius: 26, height: 50, width: '100%', alignItems: 'center', justifyContent: 'center', marginTop: 6 },
+  btnEntrarTexto: { fontFamily: fontes.titulo, fontSize: 20, color: cores.branco },
+  ou: { fontFamily: fontes.subtitulo, color: cores.azul, marginVertical: 6 },
+  btnCadastro: { backgroundColor: cores.laranjaBotao, borderRadius: 26, height: 46, width: '70%', alignItems: 'center', justifyContent: 'center' },
+  btnCadastroTexto: { fontFamily: fontes.titulo, fontSize: 16, color: cores.branco },
 });
