@@ -1,6 +1,7 @@
 // App.js
 import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useFonts, ConcertOne_400Regular } from '@expo-google-fonts/concert-one';
 import {
   Baloo2_400Regular,
@@ -18,7 +19,6 @@ export default function App() {
     Baloo2_800ExtraBold,
   });
 
-  // Espera as fontes carregarem antes de mostrar o app
   if (!fontesCarregadas) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -28,8 +28,10 @@ export default function App() {
   }
 
   return (
-    <AuthProvider>
-      <AppNavigator />
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <AppNavigator />
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }

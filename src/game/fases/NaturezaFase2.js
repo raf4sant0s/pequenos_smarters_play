@@ -5,6 +5,7 @@ import { lagoDasLetras } from '../../data/natureza';
 export default function NaturezaFase2({ navigation }) {
   return (
     <SelecaoUnica
+      ilha="Natureza"
       instrucao="CLIQUE NA VOGAL"
       rodadas={lagoDasLetras}
       onConcluir={(estrelas, erros) =>

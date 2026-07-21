@@ -1,23 +1,24 @@
 // src/navigation/AppNavigator.js
+// Uma pilha única: começa SEMPRE na Home. O login é verificado no botão "play" da Home.
 import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useAuth } from './AuthContext';
 
-// Telas de entrada (sem login)
+// Telas de entrada
 import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import CadastroScreen from '../screens/CadastroScreen';
 
-// Telas do jogo (com login)
+// Telas do jogo
 import WelcomeScreen from '../screens/WelcomeScreen';
 import MapScreen from '../screens/MapScreen';
 import ResultScreen from '../screens/ResultScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import ParentsScreen from '../screens/ParentsScreen';
 
-// Telas das ilhas (Pessoa B)
+// Telas das ilhas
 import NaturezaScreen from '../screens/islands/NaturezaScreen';
 import DesertoScreen from '../screens/islands/DesertoScreen';
 import GeloScreen from '../screens/islands/GeloScreen';
@@ -25,7 +26,7 @@ import VentosScreen from '../screens/islands/VentosScreen';
 import FogoScreen from '../screens/islands/FogoScreen';
 import LagosScreen from '../screens/islands/LagosScreen';
 
-// Fases (Pessoa B) — nomes seguem o "contrato" da Parte 2.4
+// Fases
 import NaturezaFase1 from '../game/fases/NaturezaFase1';
 import NaturezaFase2 from '../game/fases/NaturezaFase2';
 import NaturezaFase3 from '../game/fases/NaturezaFase3';
@@ -48,7 +49,7 @@ import LagosFase3 from '../game/fases/LagosFase3';
 const Stack = createStackNavigator();
 
 export default function AppNavigator() {
-  const { session, carregando } = useAuth();
+  const { carregando } = useAuth();
 
   if (carregando) {
     return (
@@ -60,50 +61,46 @@ export default function AppNavigator() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {session ? (
-          // ===== LOGADO: mostra o jogo =====
-          <>
-            <Stack.Screen name="Welcome" component={WelcomeScreen} />
-            <Stack.Screen name="Map" component={MapScreen} />
-            <Stack.Screen name="Result" component={ResultScreen} />
-            <Stack.Screen name="Settings" component={SettingsScreen} />
-            <Stack.Screen name="Parents" component={ParentsScreen} />
+      <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
+        {/* Entrada */}
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Cadastro" component={CadastroScreen} />
 
-            <Stack.Screen name="Natureza" component={NaturezaScreen} />
-            <Stack.Screen name="Deserto" component={DesertoScreen} />
-            <Stack.Screen name="Gelo" component={GeloScreen} />
-            <Stack.Screen name="Ventos" component={VentosScreen} />
-            <Stack.Screen name="Fogo" component={FogoScreen} />
-            <Stack.Screen name="Lagos" component={LagosScreen} />
+        {/* Jogo */}
+        <Stack.Screen name="Welcome" component={WelcomeScreen} />
+        <Stack.Screen name="Map" component={MapScreen} />
+        <Stack.Screen name="Result" component={ResultScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
+        <Stack.Screen name="Parents" component={ParentsScreen} />
 
-            <Stack.Screen name="NaturezaFase1" component={NaturezaFase1} />
-            <Stack.Screen name="NaturezaFase2" component={NaturezaFase2} />
-            <Stack.Screen name="NaturezaFase3" component={NaturezaFase3} />
-            <Stack.Screen name="DesertoFase1" component={DesertoFase1} />
-            <Stack.Screen name="DesertoFase2" component={DesertoFase2} />
-            <Stack.Screen name="DesertoFase3" component={DesertoFase3} />
-            <Stack.Screen name="GeloFase1" component={GeloFase1} />
-            <Stack.Screen name="GeloFase2" component={GeloFase2} />
-            <Stack.Screen name="GeloFase3" component={GeloFase3} />
-            <Stack.Screen name="VentosFase1" component={VentosFase1} />
-            <Stack.Screen name="VentosFase2" component={VentosFase2} />
-            <Stack.Screen name="VentosFase3" component={VentosFase3} />
-            <Stack.Screen name="FogoFase1" component={FogoFase1} />
-            <Stack.Screen name="FogoFase2" component={FogoFase2} />
-            <Stack.Screen name="FogoFase3" component={FogoFase3} />
-            <Stack.Screen name="LagosFase1" component={LagosFase1} />
-            <Stack.Screen name="LagosFase2" component={LagosFase2} />
-            <Stack.Screen name="LagosFase3" component={LagosFase3} />
-          </>
-        ) : (
-          // ===== DESLOGADO: mostra a entrada =====
-          <>
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Cadastro" component={CadastroScreen} />
-          </>
-        )}
+        {/* Ilhas */}
+        <Stack.Screen name="Natureza" component={NaturezaScreen} />
+        <Stack.Screen name="Deserto" component={DesertoScreen} />
+        <Stack.Screen name="Gelo" component={GeloScreen} />
+        <Stack.Screen name="Ventos" component={VentosScreen} />
+        <Stack.Screen name="Fogo" component={FogoScreen} />
+        <Stack.Screen name="Lagos" component={LagosScreen} />
+
+        {/* Fases */}
+        <Stack.Screen name="NaturezaFase1" component={NaturezaFase1} />
+        <Stack.Screen name="NaturezaFase2" component={NaturezaFase2} />
+        <Stack.Screen name="NaturezaFase3" component={NaturezaFase3} />
+        <Stack.Screen name="DesertoFase1" component={DesertoFase1} />
+        <Stack.Screen name="DesertoFase2" component={DesertoFase2} />
+        <Stack.Screen name="DesertoFase3" component={DesertoFase3} />
+        <Stack.Screen name="GeloFase1" component={GeloFase1} />
+        <Stack.Screen name="GeloFase2" component={GeloFase2} />
+        <Stack.Screen name="GeloFase3" component={GeloFase3} />
+        <Stack.Screen name="VentosFase1" component={VentosFase1} />
+        <Stack.Screen name="VentosFase2" component={VentosFase2} />
+        <Stack.Screen name="VentosFase3" component={VentosFase3} />
+        <Stack.Screen name="FogoFase1" component={FogoFase1} />
+        <Stack.Screen name="FogoFase2" component={FogoFase2} />
+        <Stack.Screen name="FogoFase3" component={FogoFase3} />
+        <Stack.Screen name="LagosFase1" component={LagosFase1} />
+        <Stack.Screen name="LagosFase2" component={LagosFase2} />
+        <Stack.Screen name="LagosFase3" component={LagosFase3} />
       </Stack.Navigator>
     </NavigationContainer>
   );

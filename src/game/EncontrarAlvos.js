@@ -19,7 +19,7 @@ const POSICOES = [
 ];
 const CORES_LETRAS = ['#1A6EBD', '#E74C3C', '#8E44AD', '#F39C12', '#16A085', '#FFFFFF'];
 
-export default function EncontrarAlvos({ instrucao, rodadas, onConcluir }) {
+export default function EncontrarAlvos({ instrucao, rodadas, onConcluir, ilha }) {
   const [i, setI] = useState(0);
   const [encontrados, setEncontrados] = useState([]); // índices já achados
   const [errados, setErrados] = useState([]);          // índices piscando vermelho
@@ -51,7 +51,7 @@ export default function EncontrarAlvos({ instrucao, rodadas, onConcluir }) {
 
   return (
     <Fundo source={FUNDO}>
-      <BarraTopo estrelas={0} />
+      <BarraTopo home={ilha} />
 
       <View style={styles.bannerWrap}>
         <View style={styles.banner}>

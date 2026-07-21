@@ -5,6 +5,7 @@ import { florestaDasVogais } from '../../data/natureza';
 export default function NaturezaFase1({ navigation }) {
   return (
     <EncontrarAlvos
+      ilha="Natureza"
       instrucao="Encontre as VOGAIS na floresta!"
       rodadas={florestaDasVogais()}
       onConcluir={(estrelas, erros) =>

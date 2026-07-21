@@ -1,6 +1,7 @@
 // src/screens/CadastroScreen.js — cadastro (horizontal)
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, Alert, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Fundo from '../components/Fundo';
 import { cadastrar } from '../services/auth';
 import { cores } from '../utils/cores';
@@ -9,6 +10,7 @@ import { fontes } from '../utils/tema';
 const LOGO = require('../../assets/images/logo.png');
 
 export default function CadastroScreen({ navigation }) {
+  const insets = useSafeAreaInsets();
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -24,8 +26,8 @@ export default function CadastroScreen({ navigation }) {
       return;
     }
     try {
-      // O design tem só "Nome" — usamos como nome da criança (e do responsável).
       await cadastrar(nome, nome, email, senha);
+      navigation.replace('Welcome'); // cadastrou e já entra (vai pro Ziggy)
     } catch (erro) {
       Alert.alert('Erro no cadastro', erro.message);
     }
@@ -33,7 +35,7 @@ export default function CadastroScreen({ navigation }) {
 
   return (
     <Fundo>
-      <Image source={LOGO} style={styles.logoTopo} resizeMode="contain" />
+      <Image source={LOGO} style={[styles.logoTopo, { top: insets.top + 10, left: insets.left + 16 }]} resizeMode="contain" />
       <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
           <View style={styles.form}>
@@ -41,23 +43,19 @@ export default function CadastroScreen({ navigation }) {
 
             <View style={styles.inputBox}>
               <Text style={styles.icone}>👤</Text>
-              <TextInput style={styles.input} placeholder="Nome" placeholderTextColor="#E0A97D"
-                value={nome} onChangeText={setNome} />
+              <TextInput style={styles.input} placeholder="Nome" placeholderTextColor="#E0A97D" value={nome} onChangeText={setNome} />
             </View>
             <View style={styles.inputBox}>
               <Text style={styles.icone}>✉️</Text>
-              <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#E0A97D"
-                value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" />
+              <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#E0A97D" value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" />
             </View>
             <View style={styles.inputBox}>
               <Text style={styles.icone}>🔒</Text>
-              <TextInput style={styles.input} placeholder="Senha" placeholderTextColor="#E0A97D"
-                value={senha} onChangeText={setSenha} secureTextEntry />
+              <TextInput style={styles.input} placeholder="Senha" placeholderTextColor="#E0A97D" value={senha} onChangeText={setSenha} secureTextEntry />
             </View>
             <View style={styles.inputBox}>
               <Text style={styles.icone}>🔒</Text>
-              <TextInput style={styles.input} placeholder="Confirmar senha" placeholderTextColor="#E0A97D"
-                value={confirmarSenha} onChangeText={setConfirmarSenha} secureTextEntry />
+              <TextInput style={styles.input} placeholder="Confirmar senha" placeholderTextColor="#E0A97D" value={confirmarSenha} onChangeText={setConfirmarSenha} secureTextEntry />
             </View>
 
             <TouchableOpacity style={styles.btnCadastrar} onPress={handleCadastro} activeOpacity={0.85}>
@@ -76,7 +74,7 @@ export default function CadastroScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  logoTopo: { position: 'absolute', top: 14, left: 16, width: 150, height: 48, zIndex: 10 },
+  logoTopo: { position: 'absolute', width: 150, height: 48, zIndex: 10 },
   scroll: { flexGrow: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 20 },
   form: { width: 400, maxWidth: '88%', alignItems: 'center' },
   titulo: { fontFamily: fontes.titulo, fontSize: 38, color: cores.laranja, marginBottom: 12, textShadowColor: cores.branco, textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 1 },

@@ -1,6 +1,7 @@
 // src/screens/LoginScreen.js — login (horizontal)
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, Alert, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Fundo from '../components/Fundo';
 import { entrar } from '../services/auth';
 import { cores } from '../utils/cores';
@@ -9,13 +10,14 @@ import { fontes } from '../utils/tema';
 const LOGO = require('../../assets/images/logo.png');
 
 export default function LoginScreen({ navigation }) {
+  const insets = useSafeAreaInsets();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
   async function handleLogin() {
     try {
       await entrar(email, senha);
-      // O AuthContext troca de tela sozinho ao logar.
+      navigation.replace('Welcome'); // vai pro Ziggy
     } catch (erro) {
       Alert.alert('Ops', 'Email ou senha incorretos.');
     }
@@ -23,7 +25,7 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <Fundo>
-      <Image source={LOGO} style={styles.logoTopo} resizeMode="contain" />
+      <Image source={LOGO} style={[styles.logoTopo, { top: insets.top + 10, left: insets.left + 16 }]} resizeMode="contain" />
       <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
           <View style={styles.form}>
@@ -59,7 +61,7 @@ export default function LoginScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  logoTopo: { position: 'absolute', top: 14, left: 16, width: 150, height: 48, zIndex: 10 },
+  logoTopo: { position: 'absolute', width: 150, height: 48, zIndex: 10 },
   scroll: { flexGrow: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 20 },
   form: { width: 380, maxWidth: '86%', alignItems: 'center' },
   titulo: { fontFamily: fontes.titulo, fontSize: 40, color: cores.azul, marginBottom: 16, textShadowColor: cores.branco, textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 1 },

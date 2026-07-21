@@ -12,7 +12,7 @@ import { fontes } from '../utils/tema';
 const FUNDO = require('../../assets/images/fundo_fase2.png');
 const ZIGGY = require('../../assets/images/ziggy.png');
 
-export default function SelecaoUnica({ instrucao, rodadas, onConcluir }) {
+export default function SelecaoUnica({ instrucao, rodadas, onConcluir, ilha }) {
   const [i, setI] = useState(0);
   const [feedback, setFeedback] = useState(null); // 'acerto' | 'erro'
   const [escolhida, setEscolhida] = useState(null);
@@ -40,7 +40,7 @@ export default function SelecaoUnica({ instrucao, rodadas, onConcluir }) {
 
   return (
     <Fundo source={FUNDO}>
-      <BarraTopo estrelas={0} />
+      <BarraTopo home={ilha} />
 
       <Image source={ZIGGY} style={styles.ziggy} resizeMode="contain" />
 
