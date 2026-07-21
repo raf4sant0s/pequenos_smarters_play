@@ -1,16 +1,22 @@
 // src/game/SelecaoUnica.js
 // Mostra uma pergunta e opções (letras, sílabas, palavras OU imagens).
-// A criança toca em uma; o componente confere e passa pra próxima rodada.
+// Tocar na opção já responde (sem botão enviar). Cenário + Ziggy + cartas com brilho.
 import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import Fundo from '../components/Fundo';
+import BarraTopo from '../components/BarraTopo';
 import { calcularEstrelas } from '../utils/estrelas';
 import { cores } from '../utils/cores';
+import { fontes } from '../utils/tema';
+
+const FUNDO = require('../../assets/images/fundo_fase2.png');
+const ZIGGY = require('../../assets/images/ziggy.png');
 
 export default function SelecaoUnica({ instrucao, rodadas, onConcluir }) {
-  const [i, setI] = useState(0);           // índice da rodada atual
+  const [i, setI] = useState(0);
   const [feedback, setFeedback] = useState(null); // 'acerto' | 'erro'
   const [escolhida, setEscolhida] = useState(null);
-  const errosRef = useRef(0); // ref evita "valor velho" dentro do setTimeout
+  const errosRef = useRef(0);
 
   const rodada = rodadas[i];
 
@@ -26,50 +32,76 @@ export default function SelecaoUnica({ instrucao, rodadas, onConcluir }) {
       setEscolhida(null);
       if (i + 1 >= rodadas.length) {
         onConcluir(calcularEstrelas(errosRef.current), errosRef.current);
-        } else {
+      } else {
         setI(i + 1);
       }
     }, 900);
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.instrucao}>{rodada.enunciado || instrucao}</Text>
+    <Fundo source={FUNDO}>
+      <BarraTopo estrelas={0} />
+
+      <Image source={ZIGGY} style={styles.ziggy} resizeMode="contain" />
+
+      {/* Banner de instrução com alto-falante */}
+      <View style={styles.bannerWrap}>
+        <View style={styles.speaker}>
+          <Text style={styles.speakerIcon}>🔊</Text>
+        </View>
+        <View style={styles.banner}>
+          <Text style={styles.bannerTexto}>{(rodada.enunciado || instrucao || '').toUpperCase()}</Text>
+        </View>
+      </View>
+
       {rodada.destaque ? <Text style={styles.destaque}>{rodada.destaque}</Text> : null}
 
+      {/* Cartas de opção */}
       <View style={styles.opcoes}>
         {rodada.opcoes.map((op) => {
-          let cor = cores.branco;
-          if (escolhida === op.id) cor = feedback === 'acerto' ? cores.verde : cores.vermelho;
+          const sel = escolhida === op.id;
+          const acerto = sel && feedback === 'acerto';
+          const erro = sel && feedback === 'erro';
           return (
             <TouchableOpacity
               key={op.id}
-              style={[styles.opcao, { backgroundColor: cor }]}
+              style={[styles.carta, acerto && styles.cartaAcerto, erro && styles.cartaErro]}
               onPress={() => escolher(op.id)}
+              activeOpacity={0.9}
             >
-              {op.Imagem
-                ? <op.Imagem width={90} height={90} />
-                : op.imagem
-                ? <Image source={op.imagem} style={styles.img} />
-                : <Text style={styles.opcaoTexto}>{op.texto}</Text>}
+              {acerto && <Text style={[styles.brilho, styles.brilhoCima]}>✨</Text>}
+              {acerto && <Text style={[styles.brilho, styles.brilhoBaixo]}>✨</Text>}
+
+              {op.Imagem ? (
+                <op.Imagem width={90} height={90} />
+              ) : op.imagem ? (
+                <Image source={op.imagem} style={styles.img} />
+              ) : (
+                <Text style={[styles.letra, (acerto || erro) && { color: cores.branco }]}>{op.texto}</Text>
+              )}
             </TouchableOpacity>
           );
         })}
       </View>
-
-      <Text style={styles.contador}>Rodada {i + 1} de {rodadas.length}</Text>
-    </View>
+    </Fundo>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#EAF3FB', alignItems: 'center', justifyContent: 'center', padding: 20 },
-  instrucao: { fontSize: 24, fontWeight: 'bold', color: cores.azul, textAlign: 'center', marginBottom: 16 },
-  destaque: { fontSize: 40, fontWeight: 'bold', color: cores.texto, letterSpacing: 4, marginBottom: 24 },
-  opcoes: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
-  opcao: { minWidth: 90, minHeight: 90, margin: 8, borderRadius: 16, borderWidth: 2, borderColor: cores.azul, alignItems: 'center', justifyContent: 'center', padding: 8 },
-  opcaoTexto: { fontSize: 34, fontWeight: 'bold', color: cores.texto },
+  ziggy: { position: 'absolute', left: 6, bottom: 0, width: '20%', height: '58%' },
+  bannerWrap: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 6 },
+  speaker: { width: 44, height: 44, borderRadius: 22, backgroundColor: cores.azulBotao, alignItems: 'center', justifyContent: 'center', marginRight: 8, borderWidth: 2, borderColor: cores.branco },
+  speakerIcon: { fontSize: 20 },
+  banner: { backgroundColor: cores.laranja, borderRadius: 20, paddingVertical: 8, paddingHorizontal: 22, borderWidth: 2, borderColor: cores.branco },
+  bannerTexto: { fontFamily: fontes.titulo, fontSize: 22, color: cores.branco, letterSpacing: 1 },
+  destaque: { fontFamily: fontes.titulo, fontSize: 34, color: cores.texto, textAlign: 'center', letterSpacing: 4, marginTop: 10 },
+  opcoes: { flex: 1, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' },
+  carta: { minWidth: 110, minHeight: 130, margin: 12, borderRadius: 20, borderWidth: 4, borderColor: cores.laranja, backgroundColor: cores.branco, alignItems: 'center', justifyContent: 'center', padding: 10 },
+  cartaAcerto: { backgroundColor: cores.verdeBotao, borderColor: '#3EA233' },
+  cartaErro: { backgroundColor: cores.vermelho, borderColor: '#B83227' },
+  letra: { fontFamily: fontes.titulo, fontSize: 64, color: cores.laranja },
   img: { width: 100, height: 100, resizeMode: 'contain' },
-  contador: { marginTop: 28, color: '#7F8C8D' },
+  brilho: { position: 'absolute', fontSize: 22 },
+  brilhoCima: { top: -6, left: -6 },
+  brilhoBaixo: { bottom: -6, right: -6 },
 });
-
