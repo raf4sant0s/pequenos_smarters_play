@@ -10,7 +10,7 @@ export default function NaturezaFase3({ navigation }) {
       rodadas={penhascoConsoantes}
       onConcluir={(estrelas, erros) =>
         navigation.replace('Result', {
-          estrelas, erros, ilha: 'natureza', fase: 'fase3',
+          estrelas, erros, ilha: 'natureza', fase: 'fase3', faseAtual: 'NaturezaFase3',
           proximaFase: 'Natureza', mensagem: 'Você concluiu a Ilha da Natureza!',
         })
       }

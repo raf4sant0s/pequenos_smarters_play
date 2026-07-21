@@ -10,7 +10,7 @@ export default function NaturezaFase1({ navigation }) {
       rodadas={florestaDasVogais()}
       onConcluir={(estrelas, erros) =>
         navigation.replace('Result', {
-          estrelas, erros, ilha: 'natureza', fase: 'fase1',
+          estrelas, erros, ilha: 'natureza', fase: 'fase1', faseAtual: 'NaturezaFase1',
           proximaFase: 'NaturezaFase2', mensagem: 'Você achou todas as vogais!',
         })
       }

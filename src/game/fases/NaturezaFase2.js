@@ -10,7 +10,7 @@ export default function NaturezaFase2({ navigation }) {
       rodadas={lagoDasLetras}
       onConcluir={(estrelas, erros) =>
         navigation.replace('Result', {
-          estrelas, erros, ilha: 'natureza', fase: 'fase2',
+          estrelas, erros, ilha: 'natureza', fase: 'fase2', faseAtual: 'NaturezaFase2',
           proximaFase: 'NaturezaFase3', mensagem: 'Você separou as vogais!',
         })
       }

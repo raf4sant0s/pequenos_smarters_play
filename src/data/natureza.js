@@ -5,8 +5,8 @@ function embaralhar(a) { return [...a].sort(() => Math.random() - 0.5); }
 
 // Fase 1 — Floresta das Vogais (EncontrarAlvos): 6 rodadas geradas
 export function florestaDasVogais() {
-  return Array.from({ length: 6 }, () => ({
-    itens: embaralhar([...VOGAIS, ...embaralhar(CONSOANTES).slice(0, 7)]),
+  return Array.from({ length: 3 }, () => ({
+    itens: embaralhar([...VOGAIS, ...embaralhar(CONSOANTES).slice(0, 4)]),
     alvos: VOGAIS,
   }));
 }

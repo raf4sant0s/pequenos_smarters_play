@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   bannerWrap: { alignItems: 'center', marginTop: 6 },
   banner: { backgroundColor: cores.verde, borderRadius: 20, paddingVertical: 8, paddingHorizontal: 22, borderWidth: 2, borderColor: cores.branco },
   bannerTexto: { fontFamily: fontes.titulo, fontSize: 20, color: cores.branco, textAlign: 'center' },
-  letraWrap: { position: 'absolute', padding: 8 },
-  letra: { fontFamily: fontes.titulo, fontSize: 44, textShadowColor: 'rgba(0,0,0,0.5)', textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 3 },
+  letraWrap: { position: 'absolute', padding: 16 },
+  letra: { fontFamily: fontes.titulo, fontSize: 60, textShadowColor: 'rgba(0,0,0,0.5)', textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 3 },
   vilao: { position: 'absolute', left: 2, bottom: 0, width: '18%', height: '46%', zIndex: 5 },
 });
