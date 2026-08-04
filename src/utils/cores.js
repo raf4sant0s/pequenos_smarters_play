@@ -17,4 +17,10 @@ export const cores = {
   amarelo: '#FFC634',      // estrelas
   cartao: '#FFFFFF',       // cartões brancos
   sombra: 'rgba(0,0,0,0.25)',
+
+  // cartas de letra do jogo (cores exatas tiradas dos PNGs do Figma)
+  cartaAzul: '#1877F2',    // Campo das letras
+  cartaLaranja: '#FF6600', // Lago das letras
+  cartaVerde: '#38DE3E',   // acerto
+  cartaVermelho: '#FA2E23',// erro
 };

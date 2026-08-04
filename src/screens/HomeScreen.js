@@ -7,17 +7,17 @@ import ConfigPopup from '../components/ConfigPopup';
 import { useAuth } from '../navigation/AuthContext';
 import { sair } from '../services/auth';
 
-const LOGO_PERS = require('../../assets/images/logoEpersonagens.png');
+const LOGO_PERS = require('../../assets/images/logo_com_personagem.png');
 const PLAY = require('../../assets/images/botao_play.png');
 const GEAR = require('../../assets/images/botao_config.png');
 
 const ILHAS = {
-  deserto: require('../../assets/images/ilhaDeserto.png'),
-  natureza: require('../../assets/images/ilhaNatureza.png'),
-  agua: require('../../assets/images/ilhaAgua.png'),
-  gelo: require('../../assets/images/ilhaGelo.png'),
-  vento: require('../../assets/images/ilhaVento.png'),
-  fogo: require('../../assets/images/ilhaFogo.png'),
+  deserto: require('../../assets/images/ilha_deserto.png'),
+  natureza: require('../../assets/images/ilha_natureza.png'),
+  agua: require('../../assets/images/ilha_lagos.png'),
+  gelo: require('../../assets/images/ilha_gelo.png'),
+  vento: require('../../assets/images/ilha_vento.png'),
+  fogo: require('../../assets/images/ilha_fogo.png'),
 };
 
 export default function HomeScreen({ navigation }) {

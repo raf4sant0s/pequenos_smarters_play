@@ -2,18 +2,17 @@
 // esquerda: ⚙ config + logo | direita: estrelas + Painel dos Pais + 🏠 casa
 // Respeita a área segura (status bar / barra de botões do celular).
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ConfigPopup from './ConfigPopup';
 import { sair } from '../services/auth';
-import { cores } from '../utils/cores';
-import { fontes } from '../utils/tema';
 
-const LOGO = require('../../assets/images/logo.png');
+const LOGO = require('../../assets/images/logo_nome.png');
 const ESTRELAS = require('../../assets/images/estrelas.png');
 const GEAR = require('../../assets/images/botao_config.png');
 const HOME = require('../../assets/images/botao_home.png');
+const PAINEL = require('../../assets/images/botao_painel.png');
 
 // home = rota pra onde o botão casinha leva (ex.: a ilha atual). Padrão: 'Welcome'.
 export default function BarraTopo({ home = 'Welcome', mostrarPainel = true, mostrarHome = true }) {
@@ -41,8 +40,8 @@ export default function BarraTopo({ home = 'Welcome', mostrarPainel = true, most
       <View style={styles.lado}>
         <Image source={ESTRELAS} style={styles.estrelas} resizeMode="contain" />
         {mostrarPainel && (
-          <TouchableOpacity style={styles.painel} onPress={() => navigation.navigate('Parents')}>
-            <Text style={styles.painelTexto}>Painel dos Pais</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Parents')}>
+            <Image source={PAINEL} style={styles.painel} resizeMode="contain" />
           </TouchableOpacity>
         )}
         {mostrarHome && (
@@ -71,7 +70,6 @@ const styles = StyleSheet.create({
   gear: { width: 40, height: 40, marginRight: 8 },
   logo: { width: 130, height: 42 },
   estrelas: { width: 78, height: 28, marginRight: 10 },
-  painel: { backgroundColor: cores.branco, borderRadius: 14, paddingVertical: 6, paddingHorizontal: 12, borderWidth: 2, borderColor: cores.azul, marginRight: 8 },
-  painelTexto: { color: cores.azul, fontFamily: fontes.subtitulo, fontSize: 13 },
+  painel: { width: 118, height: 40, marginRight: 8 },
   home: { width: 40, height: 40 },
 });

@@ -1,6 +1,7 @@
 // src/game/SelecaoUnica.js
-// Mostra uma pergunta e opções (letras, sílabas, palavras OU imagens).
-// Tocar na opção já responde (sem botão enviar). Cenário + Ziggy + cartas com brilho.
+// Motor de "escolha única": mostra uma instrução (voz/imagem/texto) e cartas.
+// Tocar na carta já responde. Serve pro Lago das letras (clique na vogal, cartas
+// laranja) e pro Campo das letras (com qual letra começa, objeto + cartas azuis).
 import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import Fundo from '../components/Fundo';
@@ -9,16 +10,35 @@ import { calcularEstrelas } from '../utils/estrelas';
 import { cores } from '../utils/cores';
 import { fontes } from '../utils/tema';
 
-const FUNDO = require('../../assets/images/fundo_fase2.png');
-const ZIGGY = require('../../assets/images/ziggy.png');
+// requires centralizados (Metro precisa de caminho literal)
+const FUNDOS = {
+  lago: require('../../assets/images/fundo_lago.png'),
+  campo: require('../../assets/images/fundo_nuvenscampo.png'),
+};
+const PERSONAGENS = {
+  pipo: require('../../assets/images/pipo.png'),
+  lina: require('../../assets/images/lina.png'),
+  ziggy: require('../../assets/images/ziggy.png'),
+};
+const SONS = {
+  azul: require('../../assets/images/som_azul.png'),
+  laranja: require('../../assets/images/som_laranja.png'),
+};
+const BANNERS = {
+  comeca: require('../../assets/images/com_qual_comeca.png'),
+};
 
-export default function SelecaoUnica({ instrucao, rodadas, onConcluir, ilha }) {
+export default function SelecaoUnica({
+  rodadas, onConcluir, ilha,
+  fundo = 'lago', personagem, som = 'azul', corCartas = 'laranja', banner,
+}) {
   const [i, setI] = useState(0);
   const [feedback, setFeedback] = useState(null); // 'acerto' | 'erro'
   const [escolhida, setEscolhida] = useState(null);
   const errosRef = useRef(0);
 
   const rodada = rodadas[i];
+  const corCarta = corCartas === 'azul' ? cores.cartaAzul : cores.cartaLaranja;
 
   function escolher(id) {
     if (feedback) return; // trava enquanto mostra o resultado
@@ -35,26 +55,37 @@ export default function SelecaoUnica({ instrucao, rodadas, onConcluir, ilha }) {
       } else {
         setI(i + 1);
       }
-    }, 900);
+    }, 950);
   }
 
   return (
-    <Fundo source={FUNDO}>
+    <Fundo source={FUNDOS[fundo]}>
       <BarraTopo home={ilha} />
 
-      <Image source={ZIGGY} style={styles.ziggy} resizeMode="contain" />
+      {personagem && (
+        <Image source={PERSONAGENS[personagem]} style={styles.personagem} resizeMode="contain" />
+      )}
 
-      {/* Banner de instrução com alto-falante */}
+      {/* Banner: alto-falante + (imagem OU texto) */}
       <View style={styles.bannerWrap}>
-        <View style={styles.speaker}>
-          <Text style={styles.speakerIcon}>🔊</Text>
-        </View>
-        <View style={styles.banner}>
-          <Text style={styles.bannerTexto}>{(rodada.enunciado || instrucao || '').toUpperCase()}</Text>
-        </View>
+        <TouchableOpacity activeOpacity={0.7}>
+          <Image source={SONS[som]} style={styles.speaker} resizeMode="contain" />
+        </TouchableOpacity>
+        {banner ? (
+          <Image source={BANNERS[banner]} style={styles.bannerImg} resizeMode="contain" />
+        ) : (
+          <View style={styles.pill}>
+            <Text style={styles.pillTexto}>{rodada.enunciado}</Text>
+          </View>
+        )}
       </View>
 
-      {rodada.destaque ? <Text style={styles.destaque}>{rodada.destaque}</Text> : null}
+      {/* Objeto (Campo das letras) */}
+      {rodada.imagemPrompt && (
+        <View style={styles.promptCard}>
+          <Image source={rodada.imagemPrompt} style={styles.promptImg} resizeMode="contain" />
+        </View>
+      )}
 
       {/* Cartas de opção */}
       <View style={styles.opcoes}>
@@ -62,23 +93,19 @@ export default function SelecaoUnica({ instrucao, rodadas, onConcluir, ilha }) {
           const sel = escolhida === op.id;
           const acerto = sel && feedback === 'acerto';
           const erro = sel && feedback === 'erro';
+          const bg = acerto ? cores.cartaVerde : erro ? cores.cartaVermelho : corCarta;
           return (
             <TouchableOpacity
               key={op.id}
-              style={[styles.carta, acerto && styles.cartaAcerto, erro && styles.cartaErro]}
+              style={[styles.carta, { backgroundColor: bg }]}
               onPress={() => escolher(op.id)}
               activeOpacity={0.9}
             >
-              {acerto && <Text style={[styles.brilho, styles.brilhoCima]}>✨</Text>}
-              {acerto && <Text style={[styles.brilho, styles.brilhoBaixo]}>✨</Text>}
-
-              {op.Imagem ? (
-                <op.Imagem width={90} height={90} />
-              ) : op.imagem ? (
-                <Image source={op.imagem} style={styles.img} />
-              ) : (
-                <Text style={[styles.letra, (acerto || erro) && { color: cores.branco }]}>{op.texto}</Text>
-              )}
+              {acerto && <Text style={[styles.marca, styles.mCima]}>✨</Text>}
+              {acerto && <Text style={[styles.marca, styles.mBaixo]}>✨</Text>}
+              {erro && <Text style={[styles.marca, styles.mCima]}>✗</Text>}
+              {erro && <Text style={[styles.marca, styles.mBaixo]}>✗</Text>}
+              <Text style={styles.letra}>{op.texto}</Text>
             </TouchableOpacity>
           );
         })}
@@ -88,20 +115,18 @@ export default function SelecaoUnica({ instrucao, rodadas, onConcluir, ilha }) {
 }
 
 const styles = StyleSheet.create({
-  ziggy: { position: 'absolute', left: 6, bottom: 0, width: '20%', height: '58%' },
-  bannerWrap: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 6 },
-  speaker: { width: 44, height: 44, borderRadius: 22, backgroundColor: cores.azulBotao, alignItems: 'center', justifyContent: 'center', marginRight: 8, borderWidth: 2, borderColor: cores.branco },
-  speakerIcon: { fontSize: 20 },
-  banner: { backgroundColor: cores.laranja, borderRadius: 20, paddingVertical: 8, paddingHorizontal: 22, borderWidth: 2, borderColor: cores.branco },
-  bannerTexto: { fontFamily: fontes.titulo, fontSize: 22, color: cores.branco, letterSpacing: 1 },
-  destaque: { fontFamily: fontes.titulo, fontSize: 34, color: cores.texto, textAlign: 'center', letterSpacing: 4, marginTop: 10 },
+  personagem: { position: 'absolute', left: 4, bottom: 0, width: '22%', height: '56%', zIndex: 4 },
+  bannerWrap: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 6, paddingHorizontal: 12 },
+  speaker: { width: 52, height: 52, marginRight: 10 },
+  bannerImg: { width: 320, maxWidth: '68%', height: 48 },
+  pill: { backgroundColor: cores.laranja, borderRadius: 20, paddingVertical: 8, paddingHorizontal: 22, borderWidth: 2, borderColor: cores.branco },
+  pillTexto: { fontFamily: fontes.titulo, fontSize: 22, color: cores.branco, letterSpacing: 1 },
+  promptCard: { alignSelf: 'center', backgroundColor: cores.branco, borderRadius: 22, borderWidth: 4, borderColor: cores.laranja, padding: 8, marginTop: 10 },
+  promptImg: { width: 120, height: 110 },
   opcoes: { flex: 1, flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' },
-  carta: { minWidth: 110, minHeight: 130, margin: 12, borderRadius: 20, borderWidth: 4, borderColor: cores.laranja, backgroundColor: cores.branco, alignItems: 'center', justifyContent: 'center', padding: 10 },
-  cartaAcerto: { backgroundColor: cores.verdeBotao, borderColor: '#3EA233' },
-  cartaErro: { backgroundColor: cores.vermelho, borderColor: '#B83227' },
-  letra: { fontFamily: fontes.titulo, fontSize: 64, color: cores.laranja },
-  img: { width: 100, height: 100, resizeMode: 'contain' },
-  brilho: { position: 'absolute', fontSize: 22 },
-  brilhoCima: { top: -6, left: -6 },
-  brilhoBaixo: { bottom: -6, right: -6 },
+  carta: { width: 104, height: 120, margin: 10, borderRadius: 22, alignItems: 'center', justifyContent: 'center', borderWidth: 4, borderColor: 'rgba(255,255,255,0.85)' },
+  letra: { fontFamily: fontes.titulo, fontSize: 66, color: cores.branco },
+  marca: { position: 'absolute', fontSize: 26, color: cores.branco },
+  mCima: { top: 2, left: 6 },
+  mBaixo: { bottom: 2, right: 6 },
 });

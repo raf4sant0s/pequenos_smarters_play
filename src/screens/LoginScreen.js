@@ -43,6 +43,10 @@ export default function LoginScreen({ navigation }) {
                 value={senha} onChangeText={setSenha} secureTextEntry />
             </View>
 
+            <TouchableOpacity style={styles.esqueceuWrap} activeOpacity={0.7}>
+              <Text style={styles.esqueceu}>Esqueceu sua senha?</Text>
+            </TouchableOpacity>
+
             <TouchableOpacity style={styles.btnEntrar} onPress={handleLogin} activeOpacity={0.85}>
               <Text style={styles.btnEntrarTexto}>ENTRAR</Text>
             </TouchableOpacity>
@@ -68,6 +72,8 @@ const styles = StyleSheet.create({
   inputBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: cores.branco, borderRadius: 26, paddingHorizontal: 18, height: 50, width: '100%', marginBottom: 12 },
   icone: { fontSize: 18, marginRight: 10 },
   input: { flex: 1, fontFamily: fontes.texto, fontSize: 16, color: cores.texto },
+  esqueceuWrap: { alignSelf: 'flex-end', marginBottom: 8 },
+  esqueceu: { fontFamily: fontes.subtitulo, fontSize: 13, color: cores.azul },
   btnEntrar: { backgroundColor: cores.azulBotao, borderRadius: 26, height: 50, width: '100%', alignItems: 'center', justifyContent: 'center', marginTop: 6 },
   btnEntrarTexto: { fontFamily: fontes.titulo, fontSize: 20, color: cores.branco },
   ou: { fontFamily: fontes.subtitulo, color: cores.azul, marginVertical: 6 },
