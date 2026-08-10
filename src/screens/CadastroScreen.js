@@ -1,16 +1,12 @@
-// src/screens/CadastroScreen.js — cadastro (horizontal)
+// src/screens/CadastroScreen.js — cadastro (horizontal, itens empilhados + rolagem)
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, Alert, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Fundo from '../components/Fundo';
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import CenarioEntrada from '../components/CenarioEntrada';
 import { cadastrar } from '../services/auth';
 import { cores } from '../utils/cores';
 import { fontes } from '../utils/tema';
 
-const LOGO = require('../../assets/images/logo.png');
-
 export default function CadastroScreen({ navigation }) {
-  const insets = useSafeAreaInsets();
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -34,10 +30,9 @@ export default function CadastroScreen({ navigation }) {
   }
 
   return (
-    <Fundo>
-      <Image source={LOGO} style={[styles.logoTopo, { top: insets.top + 10, left: insets.left + 16 }]} resizeMode="contain" />
+    <CenarioEntrada>
       <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
+        <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
           <View style={styles.form}>
             <Text style={styles.titulo}>CADASTRO</Text>
 
@@ -68,20 +63,19 @@ export default function CadastroScreen({ navigation }) {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </Fundo>
+    </CenarioEntrada>
   );
 }
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  logoTopo: { position: 'absolute', width: 150, height: 48, zIndex: 10 },
-  scroll: { flexGrow: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 20 },
-  form: { width: 400, maxWidth: '88%', alignItems: 'center' },
-  titulo: { fontFamily: fontes.titulo, fontSize: 38, color: cores.laranja, marginBottom: 12, textShadowColor: cores.branco, textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 1 },
-  inputBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: cores.branco, borderRadius: 24, paddingHorizontal: 18, height: 46, width: '100%', marginBottom: 10 },
-  icone: { fontSize: 16, marginRight: 10 },
+  scroll: { flexGrow: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 16 },
+  form: { width: 360, maxWidth: '82%', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.72)', borderRadius: 24, paddingVertical: 16, paddingHorizontal: 22 },
+  titulo: { fontFamily: fontes.titulo, fontSize: 32, color: cores.laranja, marginBottom: 12 },
+  inputBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: cores.branco, borderRadius: 22, paddingHorizontal: 16, height: 46, width: '100%', marginBottom: 10 },
+  icone: { fontSize: 16, marginRight: 8 },
   input: { flex: 1, fontFamily: fontes.texto, fontSize: 15, color: cores.texto },
-  btnCadastrar: { backgroundColor: cores.laranjaBotao, borderRadius: 26, height: 48, width: '75%', alignItems: 'center', justifyContent: 'center', marginTop: 6 },
+  btnCadastrar: { backgroundColor: cores.laranjaBotao, borderRadius: 24, height: 48, width: '100%', alignItems: 'center', justifyContent: 'center', marginTop: 4 },
   btnCadastrarTexto: { fontFamily: fontes.titulo, fontSize: 18, color: cores.branco },
   link: { fontFamily: fontes.subtitulo, color: cores.azul, marginTop: 12 },
 });

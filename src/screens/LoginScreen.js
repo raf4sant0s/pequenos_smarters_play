@@ -1,16 +1,12 @@
 // src/screens/LoginScreen.js — login (horizontal)
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, Alert, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Fundo from '../components/Fundo';
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import CenarioEntrada from '../components/CenarioEntrada';
 import { entrar } from '../services/auth';
 import { cores } from '../utils/cores';
 import { fontes } from '../utils/tema';
 
-const LOGO = require('../../assets/images/logo.png');
-
 export default function LoginScreen({ navigation }) {
-  const insets = useSafeAreaInsets();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
@@ -24,10 +20,9 @@ export default function LoginScreen({ navigation }) {
   }
 
   return (
-    <Fundo>
-      <Image source={LOGO} style={[styles.logoTopo, { top: insets.top + 10, left: insets.left + 16 }]} resizeMode="contain" />
+    <CenarioEntrada>
       <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
+        <View style={styles.centro}>
           <View style={styles.form}>
             <Text style={styles.titulo}>LOGIN</Text>
 
@@ -57,26 +52,25 @@ export default function LoginScreen({ navigation }) {
               <Text style={styles.btnCadastroTexto}>CADASTRE-SE</Text>
             </TouchableOpacity>
           </View>
-        </ScrollView>
+        </View>
       </KeyboardAvoidingView>
-    </Fundo>
+    </CenarioEntrada>
   );
 }
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  logoTopo: { position: 'absolute', width: 150, height: 48, zIndex: 10 },
-  scroll: { flexGrow: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 20 },
-  form: { width: 380, maxWidth: '86%', alignItems: 'center' },
-  titulo: { fontFamily: fontes.titulo, fontSize: 40, color: cores.azul, marginBottom: 16, textShadowColor: cores.branco, textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 1 },
-  inputBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: cores.branco, borderRadius: 26, paddingHorizontal: 18, height: 50, width: '100%', marginBottom: 12 },
-  icone: { fontSize: 18, marginRight: 10 },
-  input: { flex: 1, fontFamily: fontes.texto, fontSize: 16, color: cores.texto },
+  centro: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 8 },
+  form: { width: 360, maxWidth: '80%', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.72)', borderRadius: 24, paddingVertical: 16, paddingHorizontal: 22 },
+  titulo: { fontFamily: fontes.titulo, fontSize: 34, color: cores.azul, marginBottom: 10 },
+  inputBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: cores.branco, borderRadius: 22, paddingHorizontal: 16, height: 46, width: '100%', marginBottom: 8 },
+  icone: { fontSize: 16, marginRight: 8 },
+  input: { flex: 1, fontFamily: fontes.texto, fontSize: 15, color: cores.texto },
   esqueceuWrap: { alignSelf: 'flex-end', marginBottom: 8 },
-  esqueceu: { fontFamily: fontes.subtitulo, fontSize: 13, color: cores.azul },
-  btnEntrar: { backgroundColor: cores.azulBotao, borderRadius: 26, height: 50, width: '100%', alignItems: 'center', justifyContent: 'center', marginTop: 6 },
-  btnEntrarTexto: { fontFamily: fontes.titulo, fontSize: 20, color: cores.branco },
-  ou: { fontFamily: fontes.subtitulo, color: cores.azul, marginVertical: 6 },
-  btnCadastro: { backgroundColor: cores.laranjaBotao, borderRadius: 26, height: 46, width: '70%', alignItems: 'center', justifyContent: 'center' },
-  btnCadastroTexto: { fontFamily: fontes.titulo, fontSize: 16, color: cores.branco },
+  esqueceu: { fontFamily: fontes.subtitulo, fontSize: 12, color: cores.azul },
+  btnEntrar: { backgroundColor: cores.azulBotao, borderRadius: 24, height: 46, width: '100%', alignItems: 'center', justifyContent: 'center' },
+  btnEntrarTexto: { fontFamily: fontes.titulo, fontSize: 19, color: cores.branco },
+  ou: { fontFamily: fontes.subtitulo, color: cores.azul, marginVertical: 4 },
+  btnCadastro: { backgroundColor: cores.laranjaBotao, borderRadius: 24, height: 42, width: '72%', alignItems: 'center', justifyContent: 'center' },
+  btnCadastroTexto: { fontFamily: fontes.titulo, fontSize: 15, color: cores.branco },
 });

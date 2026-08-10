@@ -15,7 +15,7 @@ const HOME = require('../../assets/images/botao_home.png');
 const PAINEL = require('../../assets/images/botao_painel.png');
 
 // home = rota pra onde o botão casinha leva (ex.: a ilha atual). Padrão: 'Welcome'.
-export default function BarraTopo({ home = 'Welcome', mostrarPainel = true, mostrarHome = true }) {
+export default function BarraTopo({ home = 'Welcome', mostrarPainel = true, mostrarHome = true, mostrarEstrelas = true }) {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const [config, setConfig] = useState(false);
@@ -38,7 +38,7 @@ export default function BarraTopo({ home = 'Welcome', mostrarPainel = true, most
       </View>
 
       <View style={styles.lado}>
-        <Image source={ESTRELAS} style={styles.estrelas} resizeMode="contain" />
+        {mostrarEstrelas && <Image source={ESTRELAS} style={styles.estrelas} resizeMode="contain" />}
         {mostrarPainel && (
           <TouchableOpacity onPress={() => navigation.navigate('Parents')}>
             <Image source={PAINEL} style={styles.painel} resizeMode="contain" />
@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
   barra: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   lado: { flexDirection: 'row', alignItems: 'center' },
   gear: { width: 40, height: 40, marginRight: 8 },
-  logo: { width: 130, height: 42 },
-  estrelas: { width: 78, height: 28, marginRight: 10 },
-  painel: { width: 118, height: 40, marginRight: 8 },
-  home: { width: 40, height: 40 },
+  logo: { width: 160, height: 62 },
+  estrelas: { width: 78, height: 28, top: -1 },
+  painel: { width: 128, height: 50, marginRight: 8, top: 4 },
+  home: { width: 50, height: 50 },
 });

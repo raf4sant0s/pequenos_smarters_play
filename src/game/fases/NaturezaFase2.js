@@ -1,22 +1,19 @@
-// Fase 2 — Lago das letras (Pipo): clique na vogal (cartas laranja)
+// Fase 2 — Lago das letras (Pipo): clique na consoante
+// Layout/estilos ficam em LagoLetras.js (separado do Campo).
 import React from 'react';
-import SelecaoUnica from '../SelecaoUnica';
+import LagoLetras from '../LagoLetras';
 import { lagoDasLetras } from '../../data/natureza';
 
 export default function NaturezaFase2({ navigation }) {
   return (
-    <SelecaoUnica
+    <LagoLetras
       ilha="Natureza"
-      fundo="lago"
-      personagem="pipo"
-      som="laranja"
-      corCartas="laranja"
       rodadas={lagoDasLetras()}
       onConcluir={(estrelas, erros) =>
         navigation.replace('Result', {
           estrelas, erros, ilha: 'natureza', fase: 'fase2',
           faseAtual: 'NaturezaFase2', proximaFase: 'NaturezaFase3',
-          personagem: 'pipo', mensagem: 'Você encontrou todas as vogais!',
+          personagem: 'pipo', cenario: 'lago', mensagem: 'Você encontrou as consoantes!',
         })
       }
     />

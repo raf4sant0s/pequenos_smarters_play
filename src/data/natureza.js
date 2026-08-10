@@ -4,26 +4,26 @@ const CONSOANTES = 'BCDFGHJKLMNPQRSTVZ'.split('');
 function embaralhar(a) { return [...a].sort(() => Math.random() - 0.5); }
 
 // ── Fase 1 — Floresta das Vogais (EncontrarAlvos) ─────────────────────────
-// 4 rodadas: 5 vogais + 4 consoantes espalhadas; a criança acha as vogais.
+// 3 rodadas: 5 vogais + 10 consoantes espalhadas; a criança acha as vogais.
 export function florestaDasVogais() {
-  return Array.from({ length: 4 }, () => ({
-    itens: embaralhar([...VOGAIS, ...embaralhar(CONSOANTES).slice(0, 4)]),
+  return Array.from({ length: 3 }, () => ({
+    itens: embaralhar([...VOGAIS, ...embaralhar(CONSOANTES).slice(0, 10)]),
     alvos: VOGAIS,
   }));
 }
 
 // ── Fase 2 — Lago das letras (SelecaoUnica) ───────────────────────────────
-// "Clique na vogal": 2 cartas laranja (uma vogal + uma consoante) por rodada.
+// "Clique na consoante": 2 cartas laranja (uma consoante + uma vogal) por rodada.
 const LAGO = [
-  { correta: 'A', distrator: 'B' },
-  { correta: 'E', distrator: 'Q' },
-  { correta: 'I', distrator: 'M' },
-  { correta: 'O', distrator: 'J' },
-  { correta: 'U', distrator: 'D' },
+  { correta: 'B', distrator: 'A' },
+  { correta: 'M', distrator: 'E' },
+  { correta: 'T', distrator: 'I' },
+  { correta: 'D', distrator: 'O' },
+  { correta: 'F', distrator: 'U' },
 ];
 export function lagoDasLetras() {
   return embaralhar(LAGO).map(({ correta, distrator }) => ({
-    enunciado: 'CLIQUE NA VOGAL',
+    enunciado: 'CLIQUE NA CONSOANTE',
     correta,
     opcoes: embaralhar([
       { id: correta, texto: correta },

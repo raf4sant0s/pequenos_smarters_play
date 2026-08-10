@@ -2,7 +2,7 @@
 import React from 'react';
 import { ImageBackground, StyleSheet } from 'react-native';
 
-const CEU = require('../../assets/images/fundo_principal.png');
+const CEU = require('../../assets/images/fundo_nuvens.png');
 
 export default function Fundo({ source, children, style }) {
   return (
