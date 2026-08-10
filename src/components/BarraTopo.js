@@ -1,26 +1,43 @@
 // src/components/BarraTopo.js — barra do topo das telas do jogo
-// esquerda: ⚙ config + logo | direita: estrelas + Painel dos Pais + 🏠 casa
-// Respeita a área segura (status bar / barra de botões do celular).
-import React, { useState } from 'react';
-import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+// esquerda: ⚙ config + logo | direita: estrelas (média geral) + 🏠 casa
+// O "Painel dos Pais" agora fica DENTRO das configurações (⚙).
+import React, { useState, useCallback } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ConfigPopup from './ConfigPopup';
+import Estrela from './Estrela';
 import { sair } from '../services/auth';
+import { buscarProgresso } from '../services/progresso';
+import { cores } from '../utils/cores';
+import { fontes } from '../utils/tema';
 
 const LOGO = require('../../assets/images/logo_nome.png');
-const ESTRELAS = require('../../assets/images/estrelas.png');
 const GEAR = require('../../assets/images/botao_config.png');
 const HOME = require('../../assets/images/botao_home.png');
-const PAINEL = require('../../assets/images/botao_painel.png');
 
 // home = rota pra onde o botão casinha leva (ex.: a ilha atual). Padrão: 'Welcome'.
-export default function BarraTopo({ home = 'Welcome', mostrarPainel = true, mostrarHome = true, mostrarEstrelas = true }) {
+export default function BarraTopo({ home = 'Welcome', mostrarHome = true, mostrarEstrelas = true }) {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const [config, setConfig] = useState(false);
-  const [som, setSom] = useState(true);
-  const [voz, setVoz] = useState(true);
+  const [media, setMedia] = useState(0); // média de estrelas (0–3)
+
+  // Recalcula a média de estrelas sempre que a tela ganha foco.
+  useFocusEffect(
+    useCallback(() => {
+      let ativo = true;
+      buscarProgresso()
+        .then((lista) => {
+          if (!ativo) return;
+          if (!lista || !lista.length) { setMedia(0); return; }
+          const soma = lista.reduce((a, p) => a + (p.estrelas || 0), 0);
+          setMedia(Math.max(0, Math.min(3, Math.round(soma / lista.length))));
+        })
+        .catch(() => { });
+      return () => { ativo = false; };
+    }, [])
+  );
 
   async function handleSair() {
     setConfig(false);
@@ -38,11 +55,14 @@ export default function BarraTopo({ home = 'Welcome', mostrarPainel = true, most
       </View>
 
       <View style={styles.lado}>
-        {mostrarEstrelas && <Image source={ESTRELAS} style={styles.estrelas} resizeMode="contain" />}
-        {mostrarPainel && (
-          <TouchableOpacity onPress={() => navigation.navigate('Parents')}>
-            <Image source={PAINEL} style={styles.painel} resizeMode="contain" />
-          </TouchableOpacity>
+        {mostrarEstrelas && (
+          <View style={styles.estrelas}>
+            {[1, 2, 3].map((n) => (
+              <View key={n} style={n === 2 ? styles.estrelaMeio : styles.estrelaLado}>
+                <Estrela size={n === 2 ? 32 : 30} cheia={n <= media} />
+              </View>
+            ))}
+          </View>
         )}
         {mostrarHome && (
           <TouchableOpacity onPress={() => navigation.navigate(home)}>
@@ -54,10 +74,6 @@ export default function BarraTopo({ home = 'Welcome', mostrarPainel = true, most
       <ConfigPopup
         visivel={config}
         onFechar={() => setConfig(false)}
-        som={som}
-        setSom={setSom}
-        voz={voz}
-        setVoz={setVoz}
         onSair={handleSair}
       />
     </View>
@@ -69,7 +85,8 @@ const styles = StyleSheet.create({
   lado: { flexDirection: 'row', alignItems: 'center' },
   gear: { width: 40, height: 40, marginRight: 8 },
   logo: { width: 160, height: 62 },
-  estrelas: { width: 78, height: 28, top: -1 },
-  painel: { width: 128, height: 50, marginRight: 8, top: 4 },
+  estrelas: { flexDirection: 'row', alignItems: 'flex-end', marginRight: 12, gap: 2 },
+  estrelaLado: {},
+  estrelaMeio: { marginBottom: 8 },
   home: { width: 50, height: 50 },
 });
