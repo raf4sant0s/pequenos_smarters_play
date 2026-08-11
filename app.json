@@ -6,6 +6,7 @@
     "orientation": "landscape",
     "userInterfaceStyle": "light",
     "icon": "./assets/icon.png",
+    "newArchEnabled": false,
     "ios": {
       "supportsTablet": true
     },
