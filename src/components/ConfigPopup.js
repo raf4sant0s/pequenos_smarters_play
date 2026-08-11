@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { View, Text, Modal, Switch, ScrollView, TouchableOpacity, StyleSheet, Pressable, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../navigation/AuthContext';
+import { useAudio } from '../navigation/AudioContext';
 import Slider from './Slider';
 import { cores } from '../utils/cores';
 import { fontes } from '../utils/tema';
@@ -12,8 +13,7 @@ import { fontes } from '../utils/tema';
 export default function ConfigPopup({ visivel, onFechar, onSair }) {
   const navigation = useNavigation();
   const { session } = useAuth();
-  const [somVol, setSomVol] = useState(70);
-  const [vozVol, setVozVol] = useState(85);
+  const { somVol, setSomVol, vozVol, setVozVol } = useAudio(); // som controla a música de fundo
   const [daltonismo, setDaltonismo] = useState(false);
 
   function abrirPainel() {

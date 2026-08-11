@@ -9,6 +9,7 @@ import {
   Baloo2_800ExtraBold,
 } from '@expo-google-fonts/baloo-2';
 import { AuthProvider } from './src/navigation/AuthContext';
+import { AudioProvider } from './src/navigation/AudioContext';
 import AppNavigator from './src/navigation/AppNavigator';
 
 export default function App() {
@@ -30,7 +31,9 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <AuthProvider>
-        <AppNavigator />
+        <AudioProvider>
+          <AppNavigator />
+        </AudioProvider>
       </AuthProvider>
     </SafeAreaProvider>
   );
