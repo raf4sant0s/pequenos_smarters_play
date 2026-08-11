@@ -1,8 +1,8 @@
 // src/services/auth.js
 import { supabase } from './supabase';
 
-// Cadastro: cria a conta do responsável e o perfil (com nome da criança)
-export async function cadastrar(nomeResponsavel, nomeCrianca, email, senha) {
+// Cadastro: cria a conta do responsável e o perfil (nome da criança + idade)
+export async function cadastrar(nomeResponsavel, nomeCrianca, idade, email, senha) {
   const { data, error } = await supabase.auth.signUp({
     email,
     password: senha,
@@ -15,6 +15,7 @@ export async function cadastrar(nomeResponsavel, nomeCrianca, email, senha) {
     id: userId,
     nome_responsavel: nomeResponsavel,
     nome_crianca: nomeCrianca,
+    idade: idade ? Number(idade) : null,
   });
   if (erroPerfil) throw erroPerfil;
 

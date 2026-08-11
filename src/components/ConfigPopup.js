@@ -2,20 +2,26 @@
 // Itens empilhados numa coluna, sem fundo escuro atrás, cores na paleta do jogo.
 // Rolagem com barrinha fininha visível (persistentScrollbar) quando não couber.
 import React, { useState } from 'react';
-import { View, Text, Modal, Switch, ScrollView, TouchableOpacity, StyleSheet, Pressable } from 'react-native';
+import { View, Text, Modal, Switch, ScrollView, TouchableOpacity, StyleSheet, Pressable, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../navigation/AuthContext';
 import Slider from './Slider';
 import { cores } from '../utils/cores';
 import { fontes } from '../utils/tema';
 
 export default function ConfigPopup({ visivel, onFechar, onSair }) {
   const navigation = useNavigation();
+  const { session } = useAuth();
   const [somVol, setSomVol] = useState(70);
   const [vozVol, setVozVol] = useState(85);
   const [daltonismo, setDaltonismo] = useState(false);
 
   function abrirPainel() {
     onFechar();
+    if (!session) {
+      Alert.alert('Painel dos Pais', 'Você precisa fazer login para acessar o Painel dos Pais.');
+      return;
+    }
     navigation.navigate('Parents');
   }
   function sairDoJogo() {
