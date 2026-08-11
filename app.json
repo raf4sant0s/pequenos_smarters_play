@@ -1,14 +1,16 @@
 {
   "expo": {
-    "name": "frontend",
-    "slug": "frontend",
+    "name": "Pequenos Smarters",
+    "slug": "pequenos-smarters",
     "version": "1.0.0",
     "orientation": "landscape",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true
     },
-    "android": {},
+    "android": {
+      "package": "com.raf4santos.pequenossmarters"
+    },
     "web": {},
     "plugins": [
       "expo-audio",
