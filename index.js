@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler'; // precisa ser a PRIMEIRA linha (React Navigation)
 import { registerRootComponent } from 'expo';
 
 import App from './App';
