@@ -7,6 +7,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import Fundo from '../components/Fundo';
 import BarraTopo from '../components/BarraTopo';
 import TextoContorno from '../components/TextoContorno';
+import { useAudio } from '../navigation/AudioContext';
 import { calcularEstrelas } from '../utils/estrelas';
 import { cores } from '../utils/cores';
 import { fontes } from '../utils/tema';
@@ -41,6 +42,7 @@ export default function EncontrarAlvos({ instrucao, rodadas, onConcluir, ilha })
   const [errados, setErrados] = useState([]);
   const [bloqueado, setBloqueado] = useState(false);
   const errosRef = useRef(0);
+  const { tocarAcerto, tocarErro } = useAudio();
 
   const rodada = rodadas[i];
   const totalAlvos = rodada.itens.filter((l) => rodada.alvos.includes(l)).length;
@@ -48,10 +50,12 @@ export default function EncontrarAlvos({ instrucao, rodadas, onConcluir, ilha })
   function tocar(index, letra) {
     if (bloqueado || encontrados.includes(index)) return;
     if (rodada.alvos.includes(letra)) {
+      tocarAcerto();
       const novos = [...encontrados, index];
       setEncontrados(novos);
       if (novos.length >= totalAlvos) { setBloqueado(true); setTimeout(proxima, 650); }
     } else {
+      tocarErro();
       errosRef.current += 1;
       setErrados((p) => [...p, index]);
       setTimeout(() => setErrados((p) => p.filter((x) => x !== index)), 500);

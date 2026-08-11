@@ -13,7 +13,7 @@ import { fontes } from '../utils/tema';
 export default function ConfigPopup({ visivel, onFechar, onSair }) {
   const navigation = useNavigation();
   const { session } = useAuth();
-  const { somVol, setSomVol, vozVol, setVozVol } = useAudio(); // som controla a música de fundo
+  const { somVol, setSomVol, vozVol, setVozVol, tocarClique } = useAudio(); // som controla a música de fundo
   const [daltonismo, setDaltonismo] = useState(false);
 
   function abrirPainel() {
@@ -31,7 +31,7 @@ export default function ConfigPopup({ visivel, onFechar, onSair }) {
 
   return (
     <Modal visible={visivel} transparent animationType="fade" onRequestClose={onFechar}>
-      <View style={styles.overlay}>
+      <View style={styles.overlay} onStartShouldSetResponderCapture={() => { tocarClique(); return false; }}>
         {/* fundo transparente pra fechar ao tocar fora (fica ATRÁS do card) */}
         <Pressable style={StyleSheet.absoluteFill} onPress={onFechar} />
         <View style={styles.card}>
@@ -99,7 +99,7 @@ export default function ConfigPopup({ visivel, onFechar, onSair }) {
               <Text style={[styles.botaoBaixoTxt, styles.painelPaisTxt]}>Painel dos Pais</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.botaoBaixo, styles.sair]} onPress={sairDoJogo} activeOpacity={0.85}>
-              <Text style={styles.botaoBaixoTxt}>SAIR</Text>
+              <Text style={styles.botaoBaixoTxt}>SAIR DO JOGO</Text>
             </TouchableOpacity>
           </View>
         </View>

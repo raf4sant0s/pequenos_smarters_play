@@ -4,6 +4,7 @@ import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import Fundo from '../components/Fundo';
 import BarraTopo from '../components/BarraTopo';
+import { useAudio } from '../navigation/AudioContext';
 import { calcularEstrelas } from '../utils/estrelas';
 import { cores } from '../utils/cores';
 import { fontes } from '../utils/tema';
@@ -19,10 +20,12 @@ export default function CampoLetras({ rodadas, onConcluir, ilha }) {
   const [escolhida, setEscolhida] = useState(null);
   const errosRef = useRef(0);
   const rodada = rodadas[i];
+  const { tocarAcerto, tocarErro } = useAudio();
 
   function escolher(id) {
     if (feedback) return;
     const acertou = id === rodada.correta;
+    if (acertou) tocarAcerto(); else tocarErro();
     setEscolhida(id);
     setFeedback(acertou ? 'acerto' : 'erro');
     if (!acertou) errosRef.current += 1;
