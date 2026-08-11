@@ -5,16 +5,30 @@
     "version": "1.0.0",
     "orientation": "landscape",
     "userInterfaceStyle": "light",
+    "icon": "./assets/icon.png",
     "ios": {
       "supportsTablet": true
     },
     "android": {
-      "package": "com.raf4santos.pequenossmarters"
+      "package": "com.raf4santos.pequenossmarters",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#57C1F0"
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "web": {},
     "plugins": [
       "expo-audio",
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "34a11e50-1d87-4afe-a7ca-3b6a9f05fe79"
+      }
+    }
   }
 }
