@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import Fundo from '../components/Fundo';
 import BarraTopo from '../components/BarraTopo';
+import Estrela from '../components/Estrela';
 import { salvarProgresso } from '../services/progresso';
 import { cores } from '../utils/cores';
 import { fontes } from '../utils/tema';
@@ -20,7 +21,7 @@ const SOM = require('../../assets/images/som_azul.png');
 const COMEMORA = {
   ziggy: { 1: require('../../assets/images/ziggy_1estrela.png'), 2: require('../../assets/images/ziggy_2estrelas.png'), 3: require('../../assets/images/ziggy_3estrelas.png') },
   pipo: { 1: require('../../assets/images/pipo_1estrela.png'), 2: require('../../assets/images/pipo_2estrelas.png'), 3: require('../../assets/images/pipo_3estrelas.png') },
-  lina: { 2: require('../../assets/images/lina_2estrelas.png'), 3: require('../../assets/images/lina_3estrelas.png') },
+  lina: { 1: require('../../assets/images/lina_1estrela.png'), 2: require('../../assets/images/lina_2estrelas.png'), 3: require('../../assets/images/lina_3estrelas.png') },
 };
 const BASE = {
   ziggy: require('../../assets/images/ziggy.png'),
@@ -59,7 +60,7 @@ export default function ResultScreen({ navigation, route }) {
           {!heroComEstrelas && (
             <View style={styles.estrelas}>
               {[1, 2, 3].map((n) => (
-                <Text key={n} style={[styles.estrela, n <= estrelas ? styles.cheia : styles.vazia]}>{n <= estrelas ? '★' : '☆'}</Text>
+                <Estrela key={n} size={34} cheia={n <= estrelas} />
               ))}
             </View>
           )}
@@ -85,10 +86,7 @@ const styles = StyleSheet.create({
   card: { backgroundColor: cores.laranja, borderRadius: 26, paddingVertical: 10, paddingHorizontal: 22, width: 330, maxWidth: '66%', alignItems: 'center', borderWidth: 4, borderColor: cores.branco, top: '-3%' },
   parabens: { fontFamily: fontes.titulo, fontSize: 30, color: cores.amarelo, textShadowColor: cores.texto, textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 2 },
   hero: { width: '54%', height: 112, marginVertical: 3 },
-  estrelas: { flexDirection: 'row', marginBottom: 4 },
-  estrela: { fontSize: 36, marginHorizontal: 4 },
-  cheia: { color: cores.amarelo },
-  vazia: { color: 'rgba(255,255,255,0.55)' },
+  estrelas: { flexDirection: 'row', marginBottom: 4, gap: 4 },
   botao: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: cores.azulBotao, borderRadius: 22, height: 40, width: '92%', marginTop: 6, borderWidth: 2, borderColor: cores.branco },
   somIcon: { width: 26, height: 26, marginRight: 8 },
   botaoTexto: { fontFamily: fontes.titulo, fontSize: 16, color: cores.branco },
