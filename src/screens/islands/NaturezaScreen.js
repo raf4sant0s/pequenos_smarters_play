@@ -38,7 +38,7 @@ export default function NaturezaScreen({ navigation }) {
 
       <Marcador titulo={'Floresta das Vogais'} onPress={() => navigation.navigate('NaturezaFase1')} style={{ left: '42%', top: '38%', }} />
       <Marcador titulo={'Lago das Consoantes'} onPress={() => navigation.navigate('NaturezaFase2')} style={{ top: '60%', right: '30%' }} />
-      <Marcador titulo={'Campo das letras'} onPress={() => navigation.navigate('NaturezaFase3')} style={{ top: '68%', left: '35%' }} />
+      <Marcador titulo={'Campo das Letras'} onPress={() => navigation.navigate('NaturezaFase3')} style={{ top: '68%', left: '35%' }} />
     </Fundo>
   );
 }
