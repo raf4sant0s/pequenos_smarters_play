@@ -6,7 +6,6 @@
     "orientation": "landscape",
     "userInterfaceStyle": "light",
     "icon": "./assets/icon.png",
-    "newArchEnabled": false,
     "ios": {
       "supportsTablet": true
     },
@@ -25,7 +24,8 @@
     "plugins": [
       "expo-audio",
       "expo-font",
-      "expo-asset"
+      "expo-asset",
+      "expo-status-bar"
     ],
     "extra": {
       "eas": {
