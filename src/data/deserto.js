@@ -7,13 +7,23 @@ function embaralhar(a) { return [...a].sort(() => Math.random() - 0.5); }
 // O Ziggy atravessa o deserto pisando SÓ no grupo certo (vogais OU consoantes).
 // Cada "trilha" tem vários passos; em cada passo há 1 letra certa + 1 espinho.
 function sortear(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+// sorteia um item diferente do anterior (evita repetir a mesma letra de um passo pro outro)
+function sortearDiferente(arr, evitar) {
+  const opcoes = arr.length > 1 ? arr.filter((x) => x !== evitar) : arr;
+  return sortear(opcoes);
+}
 function criarTrilha(grupo) {
   const certas = grupo === 'vogal' ? VOGAIS : CONSOANTES;
   const espinhos = grupo === 'vogal' ? CONSOANTES : VOGAIS;
-  const passos = Array.from({ length: 6 }, () => ({
-    certa: sortear(certas),
-    espinho: sortear(espinhos),
-  }));
+  const passos = [];
+  let ultimaCerta = null, ultimoEspinho = null;
+  for (let n = 0; n < 6; n++) {
+    const certa = sortearDiferente(certas, ultimaCerta);
+    const espinho = sortearDiferente(espinhos, ultimoEspinho);
+    passos.push({ certa, espinho });
+    ultimaCerta = certa;
+    ultimoEspinho = espinho;
+  }
   return {
     grupo,
     instrucao: grupo === 'vogal'

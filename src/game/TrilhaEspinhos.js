@@ -44,8 +44,11 @@ export default function TrilhaEspinhos({ rodadas, onConcluir, ilha, fundo = FUND
   // pose do Pipo conforme o estado: parado (início), andando (em progresso), comemorando (fim de cada travessia)
   const imagemPipo =
     estado === 'comemorando' ? PIPO_COMEMORANDO :
-    estado === 'andando' ? PIPO_ANDANDO :
-    PIPO_PARADO;
+      estado === 'andando' ? PIPO_ANDANDO :
+        PIPO_PARADO;
+
+  // quantas pegadas mostrar: no comemorando soma +1 pra a última pegada (do passo final) aparecer
+  const pegadasVisiveis = estado === 'comemorando' ? passo + 1 : passo;
 
   function tocar(op) {
     if (bloqueado) return;
@@ -113,19 +116,23 @@ export default function TrilhaEspinhos({ rodadas, onConcluir, ilha, fundo = FUND
         })}
       </View>
 
-      {/* Trilha EMBAIXO: pegadas (alternando pé direito/esquerdo) + Pipo por cima */}
+      {/* Trilha EMBAIXO: cada pegada no ponto exato que o Pipo pisou.
+          Só aparece depois que ele SAI daquela posição (k < passo). */}
       <View style={styles.trilha} pointerEvents="none">
-        {rodada.passos.map((_, k) => (
-          <Image
-            key={k}
-            source={k % 2 === 0 ? PE_DIREITO : PE_ESQUERDO}
-            style={[styles.pegada, { opacity: k < passo ? 1 : 0.28 }]}
-            resizeMode="contain"
-          />
-        ))}
+        {rodada.passos.map((_, k) => {
+          // centro do Pipo quando estava no passo k (mesma conta do esquerdaPipo + metade da largura)
+          const centro = 12 + (k / total) * 60;
+          return (
+            <Image
+              key={k}
+              source={k % 2 === 0 ? PE_DIREITO : PE_ESQUERDO}
+              style={[styles.pegada, { left: `${centro}%`, opacity: k < pegadasVisiveis ? 1 : 0 }]}
+              resizeMode="contain"
+            />
+          );
+        })}
       </View>
       <Animated.View style={[styles.pipoWrap, { left: esquerdaPipo }]} pointerEvents="none">
-        {estado !== 'andando' && <View style={styles.sombra} />}
         <Image source={imagemPipo} style={styles.pipoImg} resizeMode="contain" />
       </Animated.View>
     </Fundo>
@@ -160,20 +167,14 @@ const styles = StyleSheet.create({
   botaoErro: { backgroundColor: '#F3B0A6', borderColor: '#C0392B' },
   botaoLetra: { fontFamily: fontes.titulo, fontSize: 46, color: '#7A3E12' },
 
-  // Trilha + Pipo embaixo
+  // Trilha + Pipo embaixo (pegadas posicionadas no ponto exato que o Pipo pisou)
   trilha: {
-    position: 'absolute', bottom: '2%', left: '6%', right: '6%', zIndex: 2,
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    position: 'absolute', bottom: '0%', left: 0, right: 0, height: 40, zIndex: 2,
   },
-  pegada: { width: 26, height: 34 },
+  pegada: { position: 'absolute', bottom: 0, width: 26, height: 34, marginLeft: -13, transform: [{ rotate: '90deg' }] },
   pipoWrap: {
-    position: 'absolute', bottom: '4%', width: '16%', height: '32%', zIndex: 3,
+    position: 'absolute', bottom: '2%', width: '20%', height: '40%', zIndex: 3,
     alignItems: 'center', justifyContent: 'flex-end',
   },
   pipoImg: { width: '100%', height: '100%' },
-  // sombra suave sob o Pipo quando parado/comemorando (tom quente, discreta)
-  sombra: {
-    position: 'absolute', bottom: 4, left: '19%', right: '19%', height: 12, borderRadius: 8,
-    backgroundColor: 'rgba(90,55,20,0.25)',
-  },
 });
