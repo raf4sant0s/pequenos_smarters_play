@@ -37,3 +37,12 @@ export async function proximaIlha() {
   const naturezaCompleta = progresso.some((p) => p.ilha === 'natureza' && p.fase === 'fase3');
   return naturezaCompleta ? 'Deserto' : 'Natureza';
 }
+
+// Lista as fases já concluídas de uma ilha (ex.: ['fase1','fase2']).
+// Usado nas telas das ilhas pra decidir quais fases ficam trancadas (cadeado).
+export async function fasesConcluidas(ilha) {
+  const progresso = await buscarProgresso();
+  return progresso
+    .filter((p) => p.ilha === String(ilha).toLowerCase())
+    .map((p) => p.fase);
+}
