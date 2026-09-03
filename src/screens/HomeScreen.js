@@ -5,15 +5,26 @@ import CenarioEntrada from '../components/CenarioEntrada';
 import BotaoPlay from '../components/BotaoPlay';
 import { useAuth } from '../navigation/AuthContext';
 import { sair } from '../services/auth';
+import { proximaIlha } from '../services/progresso';
 
 const LOGO_PERS = require('../../assets/images/logo_com_personagem.png');
 
 export default function HomeScreen({ navigation }) {
   const { session } = useAuth();
 
-  // Se já está logado, o play vai direto pro Ziggy; senão, pro Login.
-  function jogar() {
-    navigation.navigate(session ? 'Welcome' : 'Login');
+  // Sem login -> Login. Com login: retoma de onde parou.
+  // Quem ainda não terminou a Natureza passa pelo Ziggy (Welcome -> Natureza);
+  // quem já terminou vai direto pra próxima ilha (ex.: Deserto).
+  async function jogar() {
+    if (!session) { navigation.navigate('Login'); return; }
+    let destino = 'Welcome';
+    try {
+      const ilha = await proximaIlha();
+      destino = ilha === 'Natureza' ? 'Welcome' : ilha;
+    } catch (e) {
+      destino = 'Welcome';
+    }
+    navigation.navigate(destino);
   }
 
   return (

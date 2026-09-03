@@ -28,3 +28,12 @@ export async function buscarProgresso() {
   const { data } = await supabase.from('progresso').select('*').eq('user_id', user.id);
   return data || [];
 }
+
+// Decide em qual ilha a criança deve entrar, com base no progresso salvo.
+// Regra atual: se já terminou a última fase da Natureza -> vai pro Deserto.
+// Senão -> Natureza. (À medida que novas ilhas ficarem prontas, é só estender aqui.)
+export async function proximaIlha() {
+  const progresso = await buscarProgresso();
+  const naturezaCompleta = progresso.some((p) => p.ilha === 'natureza' && p.fase === 'fase3');
+  return naturezaCompleta ? 'Deserto' : 'Natureza';
+}

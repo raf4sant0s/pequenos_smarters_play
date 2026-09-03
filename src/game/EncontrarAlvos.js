@@ -36,7 +36,10 @@ function escurecer(hex, f = 0.6) {
   return '#' + [r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('');
 }
 
-export default function EncontrarAlvos({ instrucao, rodadas, onConcluir, ilha }) {
+export default function EncontrarAlvos({
+  instrucao, rodadas, onConcluir, ilha,
+  fundo = FUNDO, personagemEsq = VILAO, personagemDir = ZIGGY,
+}) {
   const [i, setI] = useState(0);
   const [encontrados, setEncontrados] = useState([]);
   const [errados, setErrados] = useState([]);
@@ -68,10 +71,10 @@ export default function EncontrarAlvos({ instrucao, rodadas, onConcluir, ilha })
   }
 
   return (
-    <Fundo source={FUNDO}>
+    <Fundo source={fundo}>
       {/* Personagens ao fundo, sem receber toque (não travam as letras) */}
-      <Image source={VILAO} style={styles.vilao} resizeMode="contain" pointerEvents="none" />
-      <Image source={ZIGGY} style={styles.ziggy} resizeMode="contain" pointerEvents="none" />
+      {personagemEsq ? <Image source={personagemEsq} style={styles.vilao} resizeMode="contain" pointerEvents="none" /> : null}
+      {personagemDir ? <Image source={personagemDir} style={styles.ziggy} resizeMode="contain" pointerEvents="none" /> : null}
 
       <BarraTopo home={ilha} />
 
@@ -99,7 +102,7 @@ export default function EncontrarAlvos({ instrucao, rodadas, onConcluir, ilha })
         <TouchableOpacity activeOpacity={0.7}>
           <Image source={SOM} style={styles.speaker} resizeMode="contain" />
         </TouchableOpacity>
-        <Text style={styles.bannerTexto}>{instrucao}</Text>
+        <Text style={styles.bannerTexto}>{rodada.instrucao || instrucao}</Text>
       </View>
     </Fundo>
   );

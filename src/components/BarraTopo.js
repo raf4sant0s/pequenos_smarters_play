@@ -46,7 +46,7 @@ export default function BarraTopo({ home = 'Welcome', mostrarHome = true, mostra
   }
 
   return (
-    <View style={[styles.barra, { paddingTop: insets.top + 8, paddingLeft: insets.left + 12, paddingRight: insets.right + 12 }]}>
+    <View style={[styles.barra, { paddingTop: 25, paddingLeft: insets.left + 12, paddingRight: insets.right + 12 }]}>
       <View style={styles.lado}>
         <TouchableOpacity onPress={() => setConfig(true)}>
           <Image source={GEAR} style={styles.gear} resizeMode="contain" />

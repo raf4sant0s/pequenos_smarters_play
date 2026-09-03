@@ -14,6 +14,7 @@ const CENARIOS = {
   floresta: require('../../assets/images/fundo_floresta.png'),
   lago: require('../../assets/images/fundo_lago.png'),
   campo: require('../../assets/images/fundo_nuvenscampo.png'),
+  deserto: require('../../assets/images/fundo_desafio_espinhos.png'),
 };
 const SOM = require('../../assets/images/som_azul.png');
 

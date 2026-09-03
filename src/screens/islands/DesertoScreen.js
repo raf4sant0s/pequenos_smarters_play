@@ -1,42 +1,63 @@
+// src/screens/islands/DesertoScreen.js — Ilha do Deserto (horizontal)
+// Arte grande da ilha + 3 marcadores (rótulo + play).
+// Por enquanto SÓ a tela: os botões ainda não entram nas fases (a fazer depois).
 import React from 'react';
-import { View, Text, ImageBackground, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import Fundo from '../../components/Fundo';
+import BarraTopo from '../../components/BarraTopo';
+import TextoContorno from '../../components/TextoContorno';
+import BotaoPlay from '../../components/BotaoPlay';
 import { cores } from '../../utils/cores';
+import { fontes } from '../../utils/tema';
+
+const ILHA = require('../../../assets/images/ilha_deserto.png');
+
+function Marcador({ titulo, onPress, style }) {
+  return (
+    <View style={[styles.marcador, style]}>
+      <TextoContorno containerStyle={styles.marcadorLabelWrap} textStyle={styles.marcadorLabel} corContorno="#000000" espessura={1.2}>
+        {titulo}
+      </TextoContorno>
+      <TouchableOpacity onPress={onPress} activeOpacity={0.85}>
+        <BotaoPlay size={45} corFundo="#63C0E8" />
+      </TouchableOpacity>
+    </View>
+  );
+}
 
 export default function DesertoScreen({ navigation }) {
+  // Ainda sem fases: por enquanto os marcadores não navegam (você vai ligar depois).
+  const semFaseAinda = () => { };
+
   return (
-    <ImageBackground
-      source={require('../../../assets/images/tela_ilhaDeserto.png')}
-      style={styles.fundo}
-    >
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('Map')}>
-          <Text style={styles.btnTopo}>🏠 Mapa</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Parents')}>
-          <Text style={styles.btnTopo}>👨‍👩‍👧 Painel</Text>
-        </TouchableOpacity>
+    <Fundo>
+      <View style={styles.ilhaWrap} pointerEvents="none">
+        <Image source={ILHA} style={styles.ilha} resizeMode="contain" />
       </View>
 
-      <Text style={styles.titulo}>ILHA DO DESERTO</Text>
+      <BarraTopo />
+      <TextoContorno containerStyle={styles.tituloWrap} textStyle={styles.titulo} corContorno="#FFFFFF" espessura={1.2}>
+        ILHA DO DESERTO
+      </TextoContorno>
 
-      <TouchableOpacity style={styles.fase} onPress={() => navigation.navigate('DesertoFase1')}>
-        <Text style={styles.faseTexto}>1 — Desafio dos Espinhos</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.fase} onPress={() => navigation.navigate('DesertoFase2')}>
-        <Text style={styles.faseTexto}>2 — Seca</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.fase} onPress={() => navigation.navigate('DesertoFase3')}>
-        <Text style={styles.faseTexto}>3 — Penhasco</Text>
-      </TouchableOpacity>
-    </ImageBackground>
+      {/* Posições — ajuste fino no left/top/right olhando no Expo.
+          (top menor = mais pra cima; left menor = mais pra esquerda) */}
+      <Marcador titulo={'Desafios dos Espinhos'} onPress={() => navigation.navigate('DesertoFase1')} style={{ left: '37%', top: '45%' }} />
+      <Marcador titulo={'Seca'} onPress={semFaseAinda} style={{ top: '54%', right: '30%' }} />
+      <Marcador titulo={'Penhasco'} onPress={semFaseAinda} style={{ top: '72%', left: '27%' }} />
+    </Fundo>
   );
 }
 
 const styles = StyleSheet.create({
-  fundo: { flex: 1, padding: 20 },
-  header: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 30 },
-  btnTopo: { backgroundColor: cores.branco, padding: 8, borderRadius: 10, fontWeight: 'bold', color: cores.azul },
-  titulo: { fontSize: 26, fontWeight: 'bold', color: cores.branco, textAlign: 'center', marginVertical: 30, textShadowColor: '#000', textShadowRadius: 4 },
-  fase: { backgroundColor: cores.laranja, padding: 16, borderRadius: 16, marginBottom: 16 },
-  faseTexto: { color: cores.branco, fontWeight: 'bold', fontSize: 16, textAlign: 'center' },
+  ilhaWrap: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' },
+  ilha: { width: '132%', height: '130%', marginTop: 180 },
+  tituloWrap: { position: 'absolute', top: 95, left: 0, right: 0, zIndex: 2 },
+  titulo: { fontFamily: fontes.titulo, fontSize: 28, color: '#8A4B10', textAlign: 'center' },
+  marcador: { position: 'absolute', alignItems: 'center', width: 130, zIndex: 6 },
+  marcadorLabelWrap: { marginBottom: -2 },
+  marcadorLabel: {
+    fontFamily: fontes.titulo, fontSize: 16, color: cores.branco, textAlign: 'center', lineHeight: 18,
+  },
+  play: { width: 45, height: 45 },
 });

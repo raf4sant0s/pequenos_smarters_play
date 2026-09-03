@@ -3,12 +3,28 @@ const VOGAIS = ['A', 'E', 'I', 'O', 'U'];
 const CONSOANTES = 'BCDFGHJKLMNPQRSTVWXYZ'.split('');
 function embaralhar(a) { return [...a].sort(() => Math.random() - 0.5); }
 
-// Fase 1 — Desafio dos Espinhos (EncontrarAlvos): toque nas consoantes
+// Fase 1 — Desafios dos Espinhos (TrilhaEspinhos)
+// O Ziggy atravessa o deserto pisando SÓ no grupo certo (vogais OU consoantes).
+// Cada "trilha" tem vários passos; em cada passo há 1 letra certa + 1 espinho.
+function sortear(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function criarTrilha(grupo) {
+  const certas = grupo === 'vogal' ? VOGAIS : CONSOANTES;
+  const espinhos = grupo === 'vogal' ? CONSOANTES : VOGAIS;
+  const passos = Array.from({ length: 6 }, () => ({
+    certa: sortear(certas),
+    espinho: sortear(espinhos),
+  }));
+  return {
+    grupo,
+    instrucao: grupo === 'vogal'
+      ? 'PISE SÓ NAS VOGAIS PRA ATRAVESSAR!'
+      : 'PISE SÓ NAS CONSOANTES PRA ATRAVESSAR!',
+    passos,
+  };
+}
 export function espinhos() {
-  return Array.from({ length: 5 }, () => {
-    const itens = embaralhar([...embaralhar(CONSOANTES).slice(0, 5), ...embaralhar(VOGAIS).slice(0, 3)]);
-    return { itens, alvos: itens.filter((l) => CONSOANTES.includes(l)) };
-  });
+  // 2 travessias: uma de vogais, uma de consoantes
+  return [criarTrilha('vogal'), criarTrilha('consoante')];
 }
 
 // Fase 2 — Seca (SelecaoUnica): complete a palavra com a consoante
