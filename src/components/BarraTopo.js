@@ -1,26 +1,27 @@
 // src/components/BarraTopo.js — barra do topo das telas do jogo
 // esquerda: ⚙ config + logo | direita: estrelas (média geral) + 🏠 casa
 // O "Painel dos Pais" agora fica DENTRO das configurações (⚙).
+// home: rota do botão casinha. Se null -> botão inerte (já estamos "em casa", ex.: tela da ilha).
+// confirmarSaida: se true, o home abre o PopupSair "deseja mesmo sair?" (usado dentro das atividades).
 import React, { useState, useCallback } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ConfigPopup from './ConfigPopup';
+import PopupSair from './PopupSair';
 import Estrela from './Estrela';
 import { sair } from '../services/auth';
 import { buscarProgresso } from '../services/progresso';
-import { cores } from '../utils/cores';
-import { fontes } from '../utils/tema';
 
 const LOGO = require('../../assets/images/logo_nome.png');
 const GEAR = require('../../assets/images/botao_config.png');
 const HOME = require('../../assets/images/botao_home.png');
 
-// home = rota pra onde o botão casinha leva (ex.: a ilha atual). Padrão: 'Welcome'.
-export default function BarraTopo({ home = 'Welcome', mostrarHome = true, mostrarEstrelas = true }) {
+export default function BarraTopo({ home = 'Welcome', mostrarHome = true, mostrarEstrelas = true, confirmarSaida = false }) {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const [config, setConfig] = useState(false);
+  const [confirmar, setConfirmar] = useState(false);
   const [media, setMedia] = useState(0); // média de estrelas (0–3)
 
   // Recalcula a média de estrelas sempre que a tela ganha foco.
@@ -45,8 +46,14 @@ export default function BarraTopo({ home = 'Welcome', mostrarHome = true, mostra
     navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
   }
 
+  function aoClicarHome() {
+    if (!home) return;                       // inerte (já estamos na tela da ilha)
+    if (confirmarSaida) { setConfirmar(true); return; } // dentro da atividade: pergunta antes
+    navigation.navigate(home);               // normal
+  }
+
   return (
-    <View style={[styles.barra, { paddingTop: 25, paddingLeft: insets.left + 12, paddingRight: insets.right + 12 }]}>
+    <View style={[styles.barra, { paddingTop: 23, paddingLeft: insets.left + 12, paddingRight: insets.right + 12 }]}>
       <View style={styles.lado}>
         <TouchableOpacity onPress={() => setConfig(true)}>
           <Image source={GEAR} style={styles.gear} resizeMode="contain" />
@@ -65,16 +72,18 @@ export default function BarraTopo({ home = 'Welcome', mostrarHome = true, mostra
           </View>
         )}
         {mostrarHome && (
-          <TouchableOpacity onPress={() => navigation.navigate(home)}>
+          <TouchableOpacity onPress={aoClicarHome}>
             <Image source={HOME} style={styles.home} resizeMode="contain" />
           </TouchableOpacity>
         )}
       </View>
 
-      <ConfigPopup
-        visivel={config}
-        onFechar={() => setConfig(false)}
-        onSair={handleSair}
+      <ConfigPopup visivel={config} onFechar={() => setConfig(false)} onSair={handleSair} />
+
+      <PopupSair
+        visivel={confirmar}
+        onContinuar={() => setConfirmar(false)}
+        onSair={() => { setConfirmar(false); navigation.navigate(home); }}
       />
     </View>
   );

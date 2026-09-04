@@ -76,7 +76,7 @@ export default function EncontrarAlvos({
       {personagemEsq ? <Image source={personagemEsq} style={styles.vilao} resizeMode="contain" pointerEvents="none" /> : null}
       {personagemDir ? <Image source={personagemDir} style={styles.ziggy} resizeMode="contain" pointerEvents="none" /> : null}
 
-      <BarraTopo home={ilha} />
+      <BarraTopo home={ilha} confirmarSaida />
 
       {rodada.itens.map((letra, index) => {
         const pos = POSICOES[index % POSICOES.length];

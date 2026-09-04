@@ -1,5 +1,5 @@
 // src/components/ConfigPopup.js — popup de Configurações
-// Itens empilhados numa coluna, sem fundo escuro atrás, cores na paleta do jogo.
+// Itens empilhados numa coluna, com um véu escuro bem leve atrás, cores na paleta do jogo.
 // Rolagem com barrinha fininha visível (persistentScrollbar) quando não couber.
 import React, { useState } from 'react';
 import { View, Text, Modal, Switch, ScrollView, TouchableOpacity, StyleSheet, Pressable, Alert } from 'react-native';
@@ -30,7 +30,7 @@ export default function ConfigPopup({ visivel, onFechar, onSair }) {
   }
 
   return (
-    <Modal visible={visivel} transparent animationType="fade" onRequestClose={onFechar}>
+    <Modal visible={visivel} transparent statusBarTranslucent animationType="fade" onRequestClose={onFechar}>
       <View style={styles.overlay} onStartShouldSetResponderCapture={() => { tocarClique(); return false; }}>
         {/* fundo transparente pra fechar ao tocar fora (fica ATRÁS do card) */}
         <Pressable style={StyleSheet.absoluteFill} onPress={onFechar} />
@@ -109,7 +109,7 @@ export default function ConfigPopup({ visivel, onFechar, onSair }) {
 }
 
 const styles = StyleSheet.create({
-  overlay: { flex: 1, backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'center' },
+  overlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.3)', alignItems: 'center', justifyContent: 'center' },
   card: {
     backgroundColor: '#2E90E0', borderRadius: 24, padding: 12, width: 380, maxWidth: '88%', maxHeight: '94%', borderWidth: 4, borderColor: cores.branco,
     shadowColor: '#000', shadowOpacity: 0.25, shadowRadius: 10, shadowOffset: { width: 0, height: 6 }, elevation: 8,

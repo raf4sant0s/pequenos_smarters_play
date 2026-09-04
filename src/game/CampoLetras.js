@@ -39,7 +39,7 @@ export default function CampoLetras({ rodadas, onConcluir, ilha }) {
 
   return (
     <Fundo source={FUNDO}>
-      <BarraTopo home={ilha} />
+      <BarraTopo home={ilha} confirmarSaida />
 
       {/* 🐘 Lina (posição/tamanho só do Campo) */}
       <Image source={LINA} style={styles.lina} resizeMode="contain" pointerEvents="none" />

@@ -34,8 +34,10 @@ export async function buscarProgresso() {
 // Senão -> Natureza. (À medida que novas ilhas ficarem prontas, é só estender aqui.)
 export async function proximaIlha() {
   const progresso = await buscarProgresso();
+  // se já tem QUALQUER progresso no Deserto, ou já terminou a Natureza -> retoma no Deserto
+  const temDeserto = progresso.some((p) => p.ilha === 'deserto');
   const naturezaCompleta = progresso.some((p) => p.ilha === 'natureza' && p.fase === 'fase3');
-  return naturezaCompleta ? 'Deserto' : 'Natureza';
+  return (temDeserto || naturezaCompleta) ? 'Deserto' : 'Natureza';
 }
 
 // Lista as fases já concluídas de uma ilha (ex.: ['fase1','fase2']).

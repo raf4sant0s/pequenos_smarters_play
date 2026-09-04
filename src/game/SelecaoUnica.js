@@ -57,7 +57,7 @@ export default function SelecaoUnica({
 
   return (
     <Fundo source={FUNDOS[fundo]}>
-      <BarraTopo home={ilha} />
+      <BarraTopo home={ilha} confirmarSaida />
 
       {personagem && (
         <Image source={PERSONAGENS[personagem]} style={[styles.personagem, estiloPersonagem]} resizeMode="contain" pointerEvents="none" />

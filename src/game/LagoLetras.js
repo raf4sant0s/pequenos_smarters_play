@@ -38,7 +38,7 @@ export default function LagoLetras({ rodadas, onConcluir, ilha }) {
 
   return (
     <Fundo source={FUNDO}>
-      <BarraTopo home={ilha} />
+      <BarraTopo home={ilha} confirmarSaida />
 
       {/* 🐒 Pipo (posição/tamanho só do Lago) */}
       <Image source={PIPO} style={styles.pipo} resizeMode="contain" pointerEvents="none" />

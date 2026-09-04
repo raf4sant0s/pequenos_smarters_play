@@ -87,7 +87,7 @@ export default function TrilhaEspinhos({ rodadas, onConcluir, ilha, fundo = FUND
 
   return (
     <Fundo source={fundo}>
-      <BarraTopo home={ilha} />
+      <BarraTopo home={ilha} confirmarSaida />
 
       {/* Balão de fala no TOPO (alto-falante laranja + instrução) */}
       <View style={styles.bannerWrap} pointerEvents="box-none">

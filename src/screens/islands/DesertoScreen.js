@@ -17,7 +17,7 @@ export default function DesertoScreen({ navigation }) {
         <Image source={ILHA} style={styles.ilha} resizeMode="contain" />
       </View>
 
-      <BarraTopo />
+      <BarraTopo home={null} />
       <TextoContorno containerStyle={styles.tituloWrap} textStyle={styles.titulo} corContorno="#FFFFFF" espessura={1.2}>
         ILHA DO DESERTO
       </TextoContorno>
