@@ -24,9 +24,10 @@ import NaturezaFase1 from '../game/fases/NaturezaFase1';
 import NaturezaFase2 from '../game/fases/NaturezaFase2';
 import NaturezaFase3 from '../game/fases/NaturezaFase3';
 
-// Ilha do Deserto (tela + Fase 1; as fases 2 e 3 entram depois)
+// Ilha do Deserto (tela + Fases 1 e 2; a fase 3 entra depois)
 import DesertoScreen from '../screens/islands/DesertoScreen';
 import DesertoFase1 from '../game/fases/DesertoFase1';
+import DesertoFase2 from '../game/fases/DesertoFase2';
 
 const Stack = createStackNavigator();
 
@@ -71,9 +72,10 @@ export default function AppNavigator() {
         <Stack.Screen name="NaturezaFase2" component={NaturezaFase2} />
         <Stack.Screen name="NaturezaFase3" component={NaturezaFase3} />
 
-        {/* Ilha do Deserto (tela + Fase 1) */}
+        {/* Ilha do Deserto (tela + Fases 1 e 2) */}
         <Stack.Screen name="Deserto" component={DesertoScreen} />
         <Stack.Screen name="DesertoFase1" component={DesertoFase1} />
+        <Stack.Screen name="DesertoFase2" component={DesertoFase2} />
       </Stack.Navigator>
     </NavigationContainer>
   );

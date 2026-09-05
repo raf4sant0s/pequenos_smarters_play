@@ -37,14 +37,18 @@ export function espinhos() {
   return [criarTrilha('vogal'), criarTrilha('consoante')];
 }
 
-// Fase 2 — Seca (SelecaoUnica): complete a palavra com a consoante
-export const seca = [
-  { enunciado: 'Complete: BATA', destaque: '_ A T A', opcoes: [{ id: 'B', texto: 'B' }, { id: 'F', texto: 'F' }, { id: 'P', texto: 'P' }], correta: 'B' },
-  { enunciado: 'Complete: CASA', destaque: 'C A _ A', opcoes: [{ id: 'S', texto: 'S' }, { id: 'T', texto: 'T' }, { id: 'L', texto: 'L' }], correta: 'S' },
-  { enunciado: 'Complete: MESA', destaque: 'M E _ A', opcoes: [{ id: 'N', texto: 'N' }, { id: 'S', texto: 'S' }, { id: 'R', texto: 'R' }], correta: 'S' },
-  { enunciado: 'Complete: PATO', destaque: 'P A _ O', opcoes: [{ id: 'G', texto: 'G' }, { id: 'T', texto: 'T' }, { id: 'D', texto: 'D' }], correta: 'T' },
-  { enunciado: 'Complete: BOLA', destaque: 'B O _ A', opcoes: [{ id: 'L', texto: 'L' }, { id: 'M', texto: 'M' }, { id: 'N', texto: 'N' }], correta: 'L' },
-];
+// Fase 2 — Seca / "Chuva na Seca" (ChuvaNaSeca)
+// Colete TODAS as imagens que começam com o som pedido, pra encher a nuvem e fazer chover.
+// Cada rodada: som-alvo + imagens alvo (começam com o som) + distratores (outros sons).
+export function chuvaNaSeca() {
+  const rodadas = [
+    { som: 'S', alvos: ['sol', 'sapo', 'sino'], distratores: ['pato', 'bola', 'maca'] },
+    { som: 'P', alvos: ['pato', 'pipa', 'pe'], distratores: ['sol', 'bode', 'flor'] },
+    { som: 'B', alvos: ['bola', 'bode', 'bone'], distratores: ['sino', 'pipa', 'mala'] },
+    { som: 'M', alvos: ['maca', 'mala', 'mao'], distratores: ['sapo', 'bola', 'pato'] },
+  ];
+  return embaralhar(rodadas);
+}
 
 // Fase 3 — Penhasco (OrdenarSequencia): organize as letras
 export const penhascoDeserto = [

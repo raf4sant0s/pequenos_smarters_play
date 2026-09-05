@@ -1,16 +1,20 @@
+// Fase 2 — Seca / "Chuva na Seca"
+// A criança coleta as imagens que começam com o som pedido pra fazer chover.
 import React from 'react';
-import SelecaoUnica from '../SelecaoUnica';
-import { seca } from '../../data/deserto';
+import ChuvaNaSeca from '../ChuvaNaSeca';
+import { chuvaNaSeca } from '../../data/deserto';
 
 export default function DesertoFase2({ navigation }) {
   return (
-    <SelecaoUnica
-      instrucao="Complete a palavra"
-      rodadas={seca}
+    <ChuvaNaSeca
+      ilha="Deserto"
+      rodadas={chuvaNaSeca()}
       onConcluir={(estrelas, erros) =>
         navigation.replace('Result', {
           estrelas, erros, ilha: 'deserto', fase: 'fase2',
-          proximaFase: 'DesertoFase3', mensagem: 'Você completou as palavras!',
+          faseAtual: 'DesertoFase2', proximaFase: 'Deserto',
+          personagem: 'pipo', cenario: 'seca',
+          mensagem: 'Você trouxe a chuva de volta!',
         })
       }
     />

@@ -22,7 +22,8 @@ const PE_ESQUERDO = require('../../assets/images/pe_esquerdo.png');
 export default function TrilhaEspinhos({ rodadas, onConcluir, ilha, fundo = FUNDO }) {
   const [ri, setRi] = useState(0);       // qual travessia
   const [passo, setPasso] = useState(0); // passo dentro da travessia
-  const [erro, setErro] = useState(null); // letra que mostrou erro
+  const [erro, setErro] = useState(null);     // letra que mostrou erro (fica vermelha)
+  const [acerto, setAcerto] = useState(null); // letra que acertou (fica verde)
   const [bloqueado, setBloqueado] = useState(false);
   const [estado, setEstado] = useState('parado'); // 'parado' | 'andando' | 'comemorando'
   const errosRef = useRef(0);
@@ -54,6 +55,8 @@ export default function TrilhaEspinhos({ rodadas, onConcluir, ilha, fundo = FUND
     if (bloqueado) return;
     if (op.certa) {
       tocarAcerto();
+      setAcerto(op.letra);
+      setTimeout(() => setAcerto(null), 400);
       const prox = passo + 1;
       setBloqueado(true);
       setEstado('andando');
@@ -103,12 +106,13 @@ export default function TrilhaEspinhos({ rodadas, onConcluir, ilha, fundo = FUND
       <View style={styles.opcoes}>
         {opcoes.map((op) => {
           const errado = erro === op.letra;
+          const acertou = acerto === op.letra;
           return (
             <TouchableOpacity
               key={op.letra}
               activeOpacity={0.85}
               onPress={() => tocar(op)}
-              style={[styles.botao, errado && styles.botaoErro]}
+              style={[styles.botao, acertou && styles.botaoAcerto, errado && styles.botaoErro]}
             >
               <Text style={styles.botaoLetra}>{op.letra}</Text>
             </TouchableOpacity>
@@ -164,6 +168,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F4C77E', borderWidth: 4, borderColor: '#B5731E',
     alignItems: 'center', justifyContent: 'center',
   },
+  botaoAcerto: { backgroundColor: '#A6E7A0', borderColor: '#3E9B3E' },
   botaoErro: { backgroundColor: '#F3B0A6', borderColor: '#C0392B' },
   botaoLetra: { fontFamily: fontes.titulo, fontSize: 46, color: '#7A3E12' },
 
