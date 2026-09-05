@@ -9,7 +9,7 @@ import { useAudio } from '../navigation/AudioContext';
 import { cores } from '../utils/cores';
 import { fontes } from '../utils/tema';
 
-export default function MarcadorFase({ titulo, bloqueada, onPress, style, corPlay = '#63C0E8' }) {
+export default function MarcadorFase({ titulo, bloqueada, onPress, aoBloquear, style, corPlay = '#63C0E8' }) {
   const { tocarErro } = useAudio();
   const shake = useRef(new Animated.Value(0)).current;
 
@@ -21,6 +21,7 @@ export default function MarcadorFase({ titulo, bloqueada, onPress, style, corPla
       Animated.timing(shake, { toValue: 1, duration: 55, useNativeDriver: true }),
       Animated.timing(shake, { toValue: 0, duration: 55, useNativeDriver: true }),
     ]).start();
+    if (aoBloquear) aoBloquear();
   }
   const translateX = shake.interpolate({ inputRange: [-1, 1], outputRange: [-6, 6] });
 
