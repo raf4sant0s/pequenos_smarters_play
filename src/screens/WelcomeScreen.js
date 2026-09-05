@@ -14,7 +14,8 @@ export default function WelcomeScreen({ navigation }) {
     <Fundo source={FUNDO}>
       <BarraTopo mostrarHome={false} mostrarPainel={false} mostrarEstrelas={false} />
 
-      <Pressable style={styles.area} onPress={() => navigation.navigate('Natureza')}>
+      {/* Boas-vindas do Ziggy (só na primeira vez, após o cadastro) -> Mapa das Ilhas */}
+      <Pressable style={styles.area} onPress={() => navigation.replace('Map')}>
         <Image source={ZIGGY} style={styles.ziggy} resizeMode="contain" />
         <Image source={BALAO} style={styles.balao} resizeMode="contain" />
       </Pressable>

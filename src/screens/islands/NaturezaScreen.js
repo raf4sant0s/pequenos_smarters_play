@@ -34,7 +34,7 @@ export default function NaturezaScreen({ navigation }) {
         <Image source={ILHA} style={styles.ilha} resizeMode="contain" />
       </View>
 
-      <BarraTopo home={null} />
+      <BarraTopo home="Map" />
       <TextoContorno containerStyle={styles.tituloWrap} textStyle={styles.titulo} corContorno="#FFFFFF" espessura={1.2}>
         ILHA DA NATUREZA
       </TextoContorno>

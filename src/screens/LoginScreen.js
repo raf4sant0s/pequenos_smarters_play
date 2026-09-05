@@ -13,7 +13,7 @@ export default function LoginScreen({ navigation }) {
   async function handleLogin() {
     try {
       await entrar(email, senha);
-      navigation.replace('Welcome'); // vai pro Ziggy
+      navigation.replace('Map'); // vai pro Mapa das Ilhas
     } catch (erro) {
       Alert.alert('Ops', 'Email ou senha incorretos.');
     }

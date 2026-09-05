@@ -34,7 +34,7 @@ export default function CadastroScreen({ navigation }) {
     }
     try {
       await cadastrar(nomeResponsavel, nomeCrianca, idadeNum, email, senha);
-      navigation.replace('Welcome'); // cadastrou e já entra (vai pro Ziggy)
+      navigation.replace('Welcome'); // primeira vez: passa pelo Ziggy antes do Mapa
     } catch (erro) {
       Alert.alert('Erro no cadastro', erro.message);
     }

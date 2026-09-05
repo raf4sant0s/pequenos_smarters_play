@@ -17,6 +17,7 @@ import CadastroScreen from '../screens/CadastroScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import ResultScreen from '../screens/ResultScreen';
 import ParentsScreen from '../screens/ParentsScreen';
+import MapScreen from '../screens/MapScreen';
 
 // Ilha da Natureza (a única pronta) + suas 3 fases
 import NaturezaScreen from '../screens/islands/NaturezaScreen';
@@ -65,6 +66,7 @@ export default function AppNavigator() {
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Result" component={ResultScreen} />
         <Stack.Screen name="Parents" component={ParentsScreen} />
+        <Stack.Screen name="Map" component={MapScreen} />
 
         {/* Ilha da Natureza */}
         <Stack.Screen name="Natureza" component={NaturezaScreen} />
