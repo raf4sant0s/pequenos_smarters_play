@@ -1,9 +1,10 @@
 // src/game/EncontrarAlvos.js
 // Floresta das Vogais: letras coloridas espalhadas; a criança toca nas vogais.
-// Cada letra tem contorno fino na própria cor, só que mais escura.
-// Dr. Preguiça à esquerda e Ziggy à direita (decorativos, NÃO bloqueiam toque).
+// Nenhuma letra nasce verde (verde é reservado pra "já achei"). Vogal achada ->
+// verde + contorno branco (destaque). Dr. Preguiça à esquerda e Ziggy à direita.
 import React, { useState, useRef } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Fundo from '../components/Fundo';
 import BarraTopo from '../components/BarraTopo';
 import TextoContorno from '../components/TextoContorno';
@@ -17,15 +18,16 @@ const VILAO = require('../../assets/images/doutor_preguica.png');
 const ZIGGY = require('../../assets/images/ziggy_apontando.png');
 const SOM = require('../../assets/images/som_azul.png');
 
-// Posições na parte de cima (preenchem o topo, longe do banner e dos personagens).
+// Formato de ARCO: as duas fileiras de cima usam a largura toda (acima da cabeça
+// dos personagens); a fileira de baixo fica só no centro (longe dos personagens
+// das laterais e acima do balão).
 const POSICOES = [
-  { top: '17%', left: '26%' }, { top: '15%', left: '45%' }, { top: '18%', left: '63%' },
-  { top: '22%', left: '80%' }, { top: '24%', left: '11%' }, { top: '36%', left: '6%' },
-  { top: '34%', left: '24%' }, { top: '38%', left: '43%' }, { top: '35%', left: '61%' },
-  { top: '40%', left: '78%' }, { top: '33%', left: '91%' }, { top: '51%', left: '22%' },
-  { top: '53%', left: '40%' }, { top: '50%', left: '57%' }, { top: '52%', left: '73%' },
+  { top: '17%', left: '12%' }, { top: '19%', left: '28%' }, { top: '16%', left: '44%' }, { top: '19%', left: '60%' }, { top: '17%', left: '76%' },
+  { top: '35%', left: '13%' }, { top: '37%', left: '29%' }, { top: '34%', left: '45%' }, { top: '37%', left: '60%' }, { top: '35%', left: '75%' },
+  { top: '53%', left: '29%' }, { top: '55%', left: '40%' }, { top: '52%', left: '50%' }, { top: '55%', left: '60%' }, { top: '53%', left: '66%' },
 ];
-const CORES_LETRAS = ['#2E7DD1', '#E8442C', '#8E44AD', '#F39C12', '#27AE60', '#16A085', '#E84393', '#F1C40F', '#2C3E50', '#E67E22'];
+// paleta SEM verde (o verde é só pra vogal já achada)
+const CORES_LETRAS = ['#2E7DD1', '#E8442C', '#8E44AD', '#F39C12', '#E84393', '#F1C40F', '#2C3E50', '#E67E22'];
 
 // deixa uma cor um pouco mais escura (pro contorno)
 function escurecer(hex, f = 0.6) {
@@ -40,6 +42,7 @@ export default function EncontrarAlvos({
   instrucao, rodadas, onConcluir, ilha,
   fundo = FUNDO, personagemEsq = VILAO, personagemDir = ZIGGY,
 }) {
+  const insets = useSafeAreaInsets();
   const [i, setI] = useState(0);
   const [encontrados, setEncontrados] = useState([]);
   const [errados, setErrados] = useState([]);
@@ -72,9 +75,9 @@ export default function EncontrarAlvos({
 
   return (
     <Fundo source={fundo}>
-      {/* Personagens ao fundo, sem receber toque (não travam as letras) */}
-      {personagemEsq ? <Image source={personagemEsq} style={styles.vilao} resizeMode="contain" pointerEvents="none" /> : null}
-      {personagemDir ? <Image source={personagemDir} style={styles.ziggy} resizeMode="contain" pointerEvents="none" /> : null}
+      {/* Personagens ao fundo (respeitam o menu do celular nas laterais) */}
+      {personagemEsq ? <Image source={personagemEsq} style={[styles.vilao, { left: insets.left }]} resizeMode="contain" pointerEvents="none" /> : null}
+      {personagemDir ? <Image source={personagemDir} style={[styles.ziggy, { right: insets.right }]} resizeMode="contain" pointerEvents="none" /> : null}
 
       <BarraTopo home={ilha} confirmarSaida />
 
@@ -88,8 +91,8 @@ export default function EncontrarAlvos({
             key={index}
             containerStyle={[styles.letraWrap, pos]}
             textStyle={[styles.letra, { color: fill }]}
-            corContorno={escurecer(fill)}
-            espessura={1.5}
+            corContorno={achado ? '#FFFFFF' : escurecer(fill)}
+            espessura={achado ? 2.6 : 1.5}
             onPress={() => tocar(index, letra)}
           >
             {letra}
@@ -97,12 +100,14 @@ export default function EncontrarAlvos({
         );
       })}
 
-      {/* Banner embaixo, no centro: alto-falante + texto (barra escura translúcida) */}
-      <View style={styles.banner}>
-        <TouchableOpacity activeOpacity={0.7}>
-          <Image source={SOM} style={styles.speaker} resizeMode="contain" />
-        </TouchableOpacity>
-        <Text style={styles.bannerTexto}>{rodada.instrucao || instrucao}</Text>
+      {/* Balão de fala embaixo — curto e centralizado, texto centralizado */}
+      <View style={styles.bannerWrap} pointerEvents="box-none">
+        <View style={styles.banner}>
+          <TouchableOpacity activeOpacity={0.7}>
+            <Image source={SOM} style={styles.speaker} resizeMode="contain" />
+          </TouchableOpacity>
+          <Text style={styles.bannerTexto}>{rodada.instrucao || instrucao}</Text>
+        </View>
       </View>
     </Fundo>
   );
@@ -110,14 +115,16 @@ export default function EncontrarAlvos({
 
 const styles = StyleSheet.create({
   letraWrap: { position: 'absolute', padding: 14, zIndex: 6 },
-  letra: { fontFamily: fontes.titulo, fontSize: 50 },
+  letra: { fontFamily: fontes.titulo, fontSize: 52 },
+
+  bannerWrap: { position: 'absolute', bottom: '7%', left: 0, right: 0, alignItems: 'center', zIndex: 3 },
   banner: {
-    position: 'absolute', bottom: '7%', left: '20%', right: '17%', zIndex: 3,
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: 'rgba(20,28,14,0.55)', borderRadius: 16, paddingVertical: 10, paddingHorizontal: 14,
+    flexDirection: 'row', alignItems: 'center', maxWidth: '46%',
+    backgroundColor: 'rgba(20,28,14,0.6)', borderRadius: 14, paddingVertical: 7, paddingHorizontal: 12,
   },
-  speaker: { width: 42, height: 42, marginRight: 10 },
-  bannerTexto: { flex: 1, fontFamily: fontes.subtitulo, fontSize: 16, color: cores.branco },
+  speaker: { width: 34, height: 34, marginRight: 8 },
+  bannerTexto: { flexShrink: 1, fontFamily: fontes.subtitulo, fontSize: 14, color: cores.branco, textAlign: 'center' },
+
   vilao: { position: 'absolute', left: 0, bottom: 0, width: '20%', height: '48%', zIndex: 2 },
   ziggy: { position: 'absolute', right: 0, bottom: 0, width: '20%', height: '48%', zIndex: 2 },
 });
