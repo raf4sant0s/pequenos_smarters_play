@@ -9,9 +9,15 @@ import { useAudio } from '../navigation/AudioContext';
 import { cores } from '../utils/cores';
 import { fontes } from '../utils/tema';
 
-export default function MarcadorFase({ titulo, bloqueada, onPress, aoBloquear, style, corPlay = '#63C0E8' }) {
-  const { tocarErro } = useAudio();
+export default function MarcadorFase({ titulo, bloqueada, onPress, aoBloquear, voz, style, corPlay = '#63C0E8' }) {
+  const { tocarErro, tocarVoz } = useAudio();
   const shake = useRef(new Animated.Value(0)).current;
+
+  // fala o nome da fase e entra logo em seguida (opção A: fluidez)
+  function aoPressionar() {
+    if (voz) tocarVoz(voz);
+    if (onPress) onPress();
+  }
 
   function aoTocarTrancado() {
     tocarErro();
@@ -38,7 +44,7 @@ export default function MarcadorFase({ titulo, bloqueada, onPress, aoBloquear, s
           </TouchableOpacity>
         </Animated.View>
       ) : (
-        <TouchableOpacity onPress={onPress} activeOpacity={0.85}>
+        <TouchableOpacity onPress={aoPressionar} activeOpacity={0.85}>
           <BotaoPlay size={45} corFundo={corPlay} />
         </TouchableOpacity>
       )}

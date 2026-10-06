@@ -8,6 +8,8 @@ export default function NaturezaFase1({ navigation }) {
     <EncontrarAlvos
       ilha="Natureza"
       instrucao="ENCONTRE AS VOGAIS QUE O DOUTOR PREGUIÇA ESCONDEU NA FLORESTA"
+      vozNome="florestadasvogais_vozgeral"
+      vozBalao="encontrevogais_ziggy"
       rodadas={florestaDasVogais()}
       onConcluir={(estrelas, erros) =>
         navigation.replace('Result', {

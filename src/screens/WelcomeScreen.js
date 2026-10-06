@@ -1,15 +1,24 @@
 // src/screens/WelcomeScreen.js — boas-vindas do Ziggy (horizontal)
 // Ziggy no campo (esquerda) + balão de fala à direita. Toque leva à 1ª ilha.
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Image, Pressable, StyleSheet } from 'react-native';
 import Fundo from '../components/Fundo';
 import BarraTopo from '../components/BarraTopo';
+import { useAudio } from '../navigation/AudioContext';
 
 const FUNDO = require('../../assets/images/fundo_ziggy.png');
 const ZIGGY = require('../../assets/images/ziggy.png');
 const BALAO = require('../../assets/images/balao_fala.png');
 
 export default function WelcomeScreen({ navigation }) {
+  const { tocarVoz } = useAudio();
+
+  // Ziggy dá as boas-vindas assim que a tela abre
+  useEffect(() => {
+    tocarVoz('saudacao_ziggy');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Fundo source={FUNDO}>
       <BarraTopo mostrarHome={false} mostrarPainel={false} mostrarEstrelas={false} />

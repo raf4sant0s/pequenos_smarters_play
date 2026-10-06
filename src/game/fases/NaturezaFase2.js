@@ -8,6 +8,8 @@ export default function NaturezaFase2({ navigation }) {
   return (
     <LagoLetras
       ilha="Natureza"
+      vozNome="lagodasconsoantes_vozgeral"
+      vozBalao="cliquenaconsoante_pipo"
       rodadas={lagoDasLetras()}
       onConcluir={(estrelas, erros) =>
         navigation.replace('Result', {

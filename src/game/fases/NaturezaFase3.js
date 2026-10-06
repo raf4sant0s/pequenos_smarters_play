@@ -8,6 +8,7 @@ export default function NaturezaFase3({ navigation }) {
   return (
     <CampoLetras
       ilha="Natureza"
+      vozNome="campodasletras_vozgeral"
       rodadas={campoDasLetras()}
       onConcluir={(estrelas, erros) =>
         navigation.replace('Result', {

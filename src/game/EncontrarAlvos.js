@@ -2,7 +2,7 @@
 // Floresta das Vogais: letras coloridas espalhadas; a criança toca nas vogais.
 // Nenhuma letra nasce verde (verde é reservado pra "já achei"). Vogal achada ->
 // verde + contorno branco (destaque). Dr. Preguiça à esquerda e Ziggy à direita.
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Fundo from '../components/Fundo';
@@ -39,7 +39,7 @@ function escurecer(hex, f = 0.6) {
 }
 
 export default function EncontrarAlvos({
-  instrucao, rodadas, onConcluir, ilha,
+  instrucao, rodadas, onConcluir, ilha, vozNome, vozBalao,
   fundo = FUNDO, personagemEsq = VILAO, personagemDir = ZIGGY,
 }) {
   const insets = useSafeAreaInsets();
@@ -48,7 +48,13 @@ export default function EncontrarAlvos({
   const [errados, setErrados] = useState([]);
   const [bloqueado, setBloqueado] = useState(false);
   const errosRef = useRef(0);
-  const { tocarAcerto, tocarErro } = useAudio();
+  const { tocarAcerto, tocarErro, tocarVoz, tocarVozes } = useAudio();
+
+  // ao abrir a fase: primeiro o nome da fase, depois a fala do personagem (balão)
+  useEffect(() => {
+    tocarVozes([vozNome, vozBalao]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const rodada = rodadas[i];
   const totalAlvos = rodada.itens.filter((l) => rodada.alvos.includes(l)).length;
@@ -103,7 +109,7 @@ export default function EncontrarAlvos({
       {/* Balão de fala embaixo — curto e centralizado, texto centralizado */}
       <View style={styles.bannerWrap} pointerEvents="box-none">
         <View style={styles.banner}>
-          <TouchableOpacity activeOpacity={0.7}>
+          <TouchableOpacity activeOpacity={0.7} onPress={() => vozBalao && tocarVoz(vozBalao)}>
             <Image source={SOM} style={styles.speaker} resizeMode="contain" />
           </TouchableOpacity>
           <Text style={styles.bannerTexto}>{rodada.instrucao || instrucao}</Text>

@@ -1,6 +1,6 @@
 // src/game/LagoLetras.js — Fase 2: Lago das letras (clique na consoante)
 // Componente PRÓPRIO do Lago: todos os elementos e estilos são só desta fase.
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import Fundo from '../components/Fundo';
 import BarraTopo from '../components/BarraTopo';
@@ -13,13 +13,19 @@ const FUNDO = require('../../assets/images/fundo_lago.png');
 const PIPO = require('../../assets/images/pipo.png');
 const SOM = require('../../assets/images/som_laranja.png');
 
-export default function LagoLetras({ rodadas, onConcluir, ilha }) {
+export default function LagoLetras({ rodadas, onConcluir, ilha, vozNome, vozBalao }) {
   const [i, setI] = useState(0);
   const [feedback, setFeedback] = useState(null); // 'acerto' | 'erro'
   const [escolhida, setEscolhida] = useState(null);
   const errosRef = useRef(0);
   const rodada = rodadas[i];
-  const { tocarAcerto, tocarErro } = useAudio();
+  const { tocarAcerto, tocarErro, tocarVoz, tocarVozes } = useAudio();
+
+  // ao abrir a fase: primeiro o nome da fase, depois a fala do personagem (balão)
+  useEffect(() => {
+    tocarVozes([vozNome, vozBalao]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function escolher(id) {
     if (feedback) return;
@@ -46,7 +52,7 @@ export default function LagoLetras({ rodadas, onConcluir, ilha }) {
       <View style={styles.centro}>
         {/* 🔊 alto-falante + enunciado */}
         <View style={styles.bannerWrap}>
-          <TouchableOpacity activeOpacity={0.7}>
+          <TouchableOpacity activeOpacity={0.7} onPress={() => vozBalao && tocarVoz(vozBalao)}>
             <Image source={SOM} style={styles.speaker} resizeMode="contain" />
           </TouchableOpacity>
           <View style={styles.pill}>

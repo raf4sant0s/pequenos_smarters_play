@@ -5,6 +5,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import Fundo from '../components/Fundo';
 import BarraTopo from '../components/BarraTopo';
 import Estrela from '../components/Estrela';
+import { useAudio } from '../navigation/AudioContext';
 import { salvarProgresso } from '../services/progresso';
 import { cores } from '../utils/cores';
 import { fontes } from '../utils/tema';
@@ -33,6 +34,7 @@ const BASE = {
 
 export default function ResultScreen({ navigation, route }) {
   const { estrelas, erros, ilha, fase, proximaFase, faseAtual, personagem = 'ziggy', cenario } = route.params;
+  const { tocarVoz } = useAudio();
 
   useEffect(() => { salvarProgresso(ilha, fase, estrelas, erros); }, []);
 
@@ -41,7 +43,13 @@ export default function ResultScreen({ navigation, route }) {
   // rota da ilha (pro botão casinha) — ex.: 'NaturezaFase1' -> 'Natureza'
   const ilhaRota = faseAtual ? faseAtual.split('Fase')[0] : 'Natureza';
 
+  function proximaFaseAgora() {
+    tocarVoz(`proximafase_${personagem}`); // voz do personagem da fase
+    navigation.replace(proximaFase);
+  }
+
   function jogarNovamente() {
+    tocarVoz(`jogarnovamente_${personagem}`); // voz do personagem da fase
     if (faseAtual) navigation.replace(faseAtual);
     else navigation.goBack();
   }
@@ -67,7 +75,7 @@ export default function ResultScreen({ navigation, route }) {
             </View>
           )}
 
-          <TouchableOpacity style={styles.botao} onPress={() => navigation.replace(proximaFase)} activeOpacity={0.85}>
+          <TouchableOpacity style={styles.botao} onPress={proximaFaseAgora} activeOpacity={0.85}>
             <Image source={SOM} style={styles.somIcon} resizeMode="contain" />
             <Text style={styles.botaoTexto}>PRÓXIMA FASE</Text>
           </TouchableOpacity>

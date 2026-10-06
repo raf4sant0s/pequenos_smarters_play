@@ -1,12 +1,13 @@
 // src/screens/islands/NaturezaScreen.js — Ilha da Natureza (horizontal)
 // Arte grande da ilha + 3 marcadores. As fases trancam (cadeado) até a anterior ser concluída.
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import Fundo from '../../components/Fundo';
 import BarraTopo from '../../components/BarraTopo';
 import TextoContorno from '../../components/TextoContorno';
 import MarcadorFase from '../../components/MarcadorFase';
+import { useAudio } from '../../navigation/AudioContext';
 import { fasesConcluidas } from '../../services/progresso';
 import { fontes } from '../../utils/tema';
 
@@ -14,6 +15,13 @@ const ILHA = require('../../../assets/images/ilha_natureza.png');
 
 export default function NaturezaScreen({ navigation }) {
   const [concluidas, setConcluidas] = useState([]);
+  const { tocarVoz } = useAudio();
+
+  // fala o nome da ilha ao entrar
+  useEffect(() => {
+    tocarVoz('ilhadanatureza_vozgeral');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // recarrega as fases concluídas sempre que a tela ganha foco
   useFocusEffect(

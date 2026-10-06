@@ -42,16 +42,17 @@ const OBJETOS = {
   flor: require('../../assets/images/flor.png'),
 };
 const CAMPO = [
-  { objeto: 'cachorro', correta: 'C', distratores: ['B', 'J'] },
-  { objeto: 'aviao', correta: 'A', distratores: ['P', 'D'] },
-  { objeto: 'elefante', correta: 'E', distratores: ['H', 'T'] },
-  { objeto: 'maca', correta: 'M', distratores: ['N', 'K'] },
-  { objeto: 'flor', correta: 'F', distratores: ['V', 'O'] },
+  { objeto: 'cachorro', correta: 'C', distratores: ['B', 'J'], voz: 'cachorro_lina' },
+  { objeto: 'aviao', correta: 'A', distratores: ['P', 'D'], voz: 'aviao_lina' },
+  { objeto: 'elefante', correta: 'E', distratores: ['H', 'T'], voz: 'elefante_lina' },
+  { objeto: 'maca', correta: 'M', distratores: ['N', 'K'], voz: 'maça_lina' },
+  { objeto: 'flor', correta: 'F', distratores: ['V', 'O'], voz: 'flor_lina' },
 ];
 export function campoDasLetras() {
-  return embaralhar(CAMPO).map(({ objeto, correta, distratores }) => ({
+  return embaralhar(CAMPO).map(({ objeto, correta, distratores, voz }) => ({
     enunciado: 'COM QUAL LETRA COMEÇA?',
     imagemPrompt: OBJETOS[objeto],
+    voz,
     correta,
     opcoes: embaralhar([
       { id: correta, texto: correta },

@@ -21,7 +21,7 @@ const MAPA = { x: 50, y: 24 };
 
 // Ilhas em arco (meia-lua), ordem cronológica. c = centro em % da tela.
 const ILHAS = [
-  { key: 'natureza', rota: 'Natureza', nome: 'Natureza', img: require('../../assets/images/ilha_natureza.png'), c: { x: 13, y: 44 } },
+  { key: 'natureza', rota: 'Natureza', nome: 'Natureza', voz: 'ilhadanatureza_vozgeral', img: require('../../assets/images/ilha_natureza.png'), c: { x: 13, y: 44 } },
   { key: 'deserto', rota: 'Deserto', nome: 'Deserto', img: require('../../assets/images/ilha_deserto.png'), c: { x: 27, y: 60 } },
   { key: 'gelo', rota: 'Gelo', nome: 'Gelo', construcao: true, img: require('../../assets/images/ilha_gelo.png'), c: { x: 41, y: 70 } },
   { key: 'ventos', rota: 'Ventos', nome: 'Ventos', construcao: true, img: require('../../assets/images/ilha_vento.png'), c: { x: 55, y: 70 } },
@@ -31,8 +31,8 @@ const ILHAS = [
 
 const ILHA_W = 20; // largura da ilha em % (metade = 10)
 
-function IlhaMapa({ nome, img, bloqueada, onEntrar, onTrancada, style }) {
-  const { tocarErro } = useAudio();
+function IlhaMapa({ nome, voz, img, bloqueada, onEntrar, onTrancada, style }) {
+  const { tocarErro, tocarVoz } = useAudio();
   const shake = useRef(new Animated.Value(0)).current;
 
   function tocar() {
@@ -46,6 +46,7 @@ function IlhaMapa({ nome, img, bloqueada, onEntrar, onTrancada, style }) {
       ]).start();
       if (onTrancada) onTrancada();
     } else {
+      if (voz) tocarVoz(voz); // fala o nome da ilha ao tocar nela
       onEntrar();
     }
   }
@@ -114,6 +115,7 @@ export default function MapScreen({ navigation }) {
         <IlhaMapa
           key={ilha.key}
           nome={ilha.nome}
+          voz={ilha.voz}
           img={ilha.img}
           bloqueada={trancada(ilha)}
           style={{ left: `${ilha.c.x - ILHA_W / 2}%`, top: `${ilha.c.y - 14}%` }}

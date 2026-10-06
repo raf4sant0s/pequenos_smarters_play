@@ -17,7 +17,8 @@ config.transformer = {
 };
 config.resolver = {
   ...resolver,
-  assetExts: resolver.assetExts.filter((ext) => ext !== 'svg'),
+  // tira 'svg' dos assets (vira componente) e garante 'mpeg' nos assets (áudios de voz)
+  assetExts: [...resolver.assetExts.filter((ext) => ext !== 'svg'), 'mpeg'],
   sourceExts: [...resolver.sourceExts, 'svg'],
 };
 

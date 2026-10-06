@@ -10,6 +10,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ConfigPopup from './ConfigPopup';
 import PopupSair from './PopupSair';
 import Estrela from './Estrela';
+import { useAudio } from '../navigation/AudioContext';
 import { sair } from '../services/auth';
 import { buscarProgresso } from '../services/progresso';
 
@@ -20,6 +21,7 @@ const HOME = require('../../assets/images/botao_home.png');
 export default function BarraTopo({ home = 'Welcome', mostrarHome = true, mostrarEstrelas = true, confirmarSaida = false }) {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+  const { tocarVoz } = useAudio();
   const [config, setConfig] = useState(false);
   const [confirmar, setConfirmar] = useState(false);
   const [media, setMedia] = useState(0); // média de estrelas (0–3)
@@ -55,7 +57,7 @@ export default function BarraTopo({ home = 'Welcome', mostrarHome = true, mostra
   return (
     <View style={[styles.barra, { paddingTop: 23, paddingLeft: insets.left + 12, paddingRight: insets.right + 12 }]}>
       <View style={styles.lado}>
-        <TouchableOpacity onPress={() => setConfig(true)}>
+        <TouchableOpacity onPress={() => { tocarVoz('configuracoes_vozgeral'); setConfig(true); }}>
           <Image source={GEAR} style={styles.gear} resizeMode="contain" />
         </TouchableOpacity>
         <Image source={LOGO} style={styles.logo} resizeMode="contain" />

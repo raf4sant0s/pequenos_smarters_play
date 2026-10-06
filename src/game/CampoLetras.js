@@ -1,6 +1,6 @@
 // src/game/CampoLetras.js — Fase 3: Campo das letras (com qual letra começa)
 // Componente PRÓPRIO do Campo: todos os elementos e estilos são só desta fase.
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import Fundo from '../components/Fundo';
 import BarraTopo from '../components/BarraTopo';
@@ -14,13 +14,20 @@ const LINA = require('../../assets/images/lina.png');
 const SOM = require('../../assets/images/som_azul.png');
 const BANNER = require('../../assets/images/com_qual_comeca.png');
 
-export default function CampoLetras({ rodadas, onConcluir, ilha }) {
+export default function CampoLetras({ rodadas, onConcluir, ilha, vozNome }) {
   const [i, setI] = useState(0);
   const [feedback, setFeedback] = useState(null); // 'acerto' | 'erro'
   const [escolhida, setEscolhida] = useState(null);
   const errosRef = useRef(0);
   const rodada = rodadas[i];
-  const { tocarAcerto, tocarErro } = useAudio();
+  const { tocarAcerto, tocarErro, tocarVoz, tocarVozes } = useAudio();
+
+  // 1ª rodada: nome da fase -> palavra do objeto. Rodadas seguintes: só a palavra.
+  useEffect(() => {
+    if (i === 0) tocarVozes([vozNome, rodada?.voz]);
+    else if (rodada?.voz) tocarVoz(rodada.voz);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i]);
 
   function escolher(id) {
     if (feedback) return;
@@ -47,7 +54,7 @@ export default function CampoLetras({ rodadas, onConcluir, ilha }) {
       <View style={styles.centro}>
         {/* 🔊 alto-falante + banner "COM QUAL LETRA COMEÇA" */}
         <View style={styles.bannerWrap}>
-          <TouchableOpacity activeOpacity={0.7}>
+          <TouchableOpacity activeOpacity={0.7} onPress={() => rodada?.voz && tocarVoz(rodada.voz)}>
             <Image source={SOM} style={styles.speaker} resizeMode="contain" />
           </TouchableOpacity>
           <Image source={BANNER} style={styles.bannerImg} resizeMode="contain" />
@@ -55,9 +62,9 @@ export default function CampoLetras({ rodadas, onConcluir, ilha }) {
 
         {/* 🖼️ objeto + 🔷 cartas */}
         <View style={styles.linha}>
-          <View style={styles.promptCard}>
+          <TouchableOpacity style={styles.promptCard} activeOpacity={0.85} onPress={() => rodada?.voz && tocarVoz(rodada.voz)}>
             <Image source={rodada.imagemPrompt} style={styles.promptImg} resizeMode="contain" />
-          </View>
+          </TouchableOpacity>
 
           {rodada.opcoes.map((op) => {
             const sel = escolhida === op.id;

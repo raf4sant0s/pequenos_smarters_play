@@ -13,10 +13,11 @@ import { fontes } from '../utils/tema';
 export default function ConfigPopup({ visivel, onFechar, onSair }) {
   const navigation = useNavigation();
   const { session } = useAuth();
-  const { somVol, setSomVol, vozVol, setVozVol, tocarClique } = useAudio(); // som controla a música de fundo
+  const { somVol, setSomVol, vozVol, setVozVol, tocarClique, tocarVoz } = useAudio(); // som controla a música de fundo
   const [daltonismo, setDaltonismo] = useState(false);
 
   function abrirPainel() {
+    tocarVoz('paineldospais_vozgeral');
     onFechar();
     if (!session) {
       Alert.alert('Painel dos Pais', 'Você precisa fazer login para acessar o Painel dos Pais.');
@@ -25,6 +26,7 @@ export default function ConfigPopup({ visivel, onFechar, onSair }) {
     navigation.navigate('Parents');
   }
   function sairDoJogo() {
+    tocarVoz('sairdojogo_vozgeral');
     if (onSair) onSair();
     else { onFechar(); navigation.reset({ index: 0, routes: [{ name: 'Home' }] }); }
   }
@@ -57,7 +59,7 @@ export default function ConfigPopup({ visivel, onFechar, onSair }) {
             </View>
             <View style={styles.linhaSlider}>
               <View style={styles.sliderBox}><Slider valor={somVol} onChange={setSomVol} cor={cores.laranja} /></View>
-              <View style={styles.botaoIcone}><Text style={styles.botaoIconeTxt}>🔊</Text></View>
+              <TouchableOpacity style={styles.botaoIcone} onPress={() => tocarVoz('som_vozgeral')} activeOpacity={0.7}><Text style={styles.botaoIconeTxt}>🔊</Text></TouchableOpacity>
             </View>
 
             {/* VOZ */}
@@ -68,7 +70,7 @@ export default function ConfigPopup({ visivel, onFechar, onSair }) {
             </View>
             <View style={styles.linhaSlider}>
               <View style={styles.sliderBox}><Slider valor={vozVol} onChange={setVozVol} cor={cores.laranja} /></View>
-              <View style={styles.botaoIcone}><Text style={styles.botaoIconeTxt}>🎤</Text></View>
+              <TouchableOpacity style={styles.botaoIcone} onPress={() => tocarVoz('voz_vozgeral')} activeOpacity={0.7}><Text style={styles.botaoIconeTxt}>🎤</Text></TouchableOpacity>
             </View>
 
             <View style={styles.divisor} />
