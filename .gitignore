@@ -40,6 +40,7 @@ yarn-error.*
 /ios
 /android
 
-#ignorar isso
+#ignorar isso (ferramentas de IA, não vão pro GitHub)
 .claude/
-.CLAUDE.md/
+AGENTS.md
+CLAUDE.md
