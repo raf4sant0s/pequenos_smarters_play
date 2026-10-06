@@ -20,11 +20,12 @@ export default function CampoLetras({ rodadas, onConcluir, ilha, vozNome }) {
   const [escolhida, setEscolhida] = useState(null);
   const errosRef = useRef(0);
   const rodada = rodadas[i];
-  const { tocarAcerto, tocarErro, tocarVoz, tocarVozes } = useAudio();
+  const { tocarAcerto, tocarErro, tocarVoz, tocarVozesEncadeado } = useAudio();
 
-  // 1ª rodada: nome da fase -> palavra do objeto. Rodadas seguintes: só a palavra.
+  // 1ª rodada: nome da fase -> palavra do objeto (sem cortar a voz "próxima fase"
+  // vinda do resultado). Rodadas seguintes: só a palavra.
   useEffect(() => {
-    if (i === 0) tocarVozes([vozNome, rodada?.voz]);
+    if (i === 0) tocarVozesEncadeado([vozNome, rodada?.voz]);
     else if (rodada?.voz) tocarVoz(rodada.voz);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i]);

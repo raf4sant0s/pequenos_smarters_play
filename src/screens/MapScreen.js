@@ -31,6 +31,10 @@ const ILHAS = [
 
 const ILHA_W = 20; // largura da ilha em % (metade = 10)
 
+// Durante a validação APENAS da Ilha da Natureza, o Deserto fica trancado para
+// todo mundo. Quando for reabrir o Deserto, troque para true.
+const DESERTO_LIBERADO = false;
+
 function IlhaMapa({ nome, voz, img, bloqueada, onEntrar, onTrancada, style }) {
   const { tocarErro, tocarVoz } = useAudio();
   const shake = useRef(new Animated.Value(0)).current;
@@ -72,12 +76,15 @@ function IlhaMapa({ nome, voz, img, bloqueada, onEntrar, onTrancada, style }) {
 export default function MapScreen({ navigation }) {
   const [progresso, setProgresso] = useState([]);
   const [aviso, setAviso] = useState(false);
+  const { tocarVoz } = useAudio();
 
   useFocusEffect(
     useCallback(() => {
       let ativo = true;
+      tocarVoz('mapa_vozgeral'); // fala ao entrar/voltar ao mapa
       buscarProgresso().then((l) => { if (ativo) setProgresso(l || []); }).catch(() => { });
       return () => { ativo = false; };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
   );
 
@@ -87,7 +94,7 @@ export default function MapScreen({ navigation }) {
   function trancada(ilha) {
     if (ilha.construcao) return true;
     if (ilha.key === 'natureza') return false;
-    if (ilha.key === 'deserto') return !(naturezaCompleta || temDeserto);
+    if (ilha.key === 'deserto') return DESERTO_LIBERADO ? !(naturezaCompleta || temDeserto) : true;
     return true;
   }
 
@@ -120,7 +127,10 @@ export default function MapScreen({ navigation }) {
           bloqueada={trancada(ilha)}
           style={{ left: `${ilha.c.x - ILHA_W / 2}%`, top: `${ilha.c.y - 14}%` }}
           onEntrar={() => navigation.navigate(ilha.rota)}
-          onTrancada={() => { if (ilha.construcao) setAviso(true); }}
+          onTrancada={() => {
+            // ilhas "em construção" e o Deserto (trancado p/ validação) mostram o card
+            if (ilha.construcao || (ilha.key === 'deserto' && !DESERTO_LIBERADO)) setAviso(true);
+          }}
         />
       ))}
 

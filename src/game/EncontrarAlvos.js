@@ -48,11 +48,12 @@ export default function EncontrarAlvos({
   const [errados, setErrados] = useState([]);
   const [bloqueado, setBloqueado] = useState(false);
   const errosRef = useRef(0);
-  const { tocarAcerto, tocarErro, tocarVoz, tocarVozes } = useAudio();
+  const { tocarAcerto, tocarErro, tocarVoz, tocarVozesEncadeado } = useAudio();
 
-  // ao abrir a fase: primeiro o nome da fase, depois a fala do personagem (balão)
+  // ao abrir a fase: nome da fase -> fala do personagem (balão), sem cortar a
+  // voz "próxima fase" que pode estar tocando vinda da tela de resultado.
   useEffect(() => {
-    tocarVozes([vozNome, vozBalao]);
+    tocarVozesEncadeado([vozNome, vozBalao]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

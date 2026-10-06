@@ -13,7 +13,8 @@ export default function NaturezaFase3({ navigation }) {
       onConcluir={(estrelas, erros) =>
         navigation.replace('Result', {
           estrelas, erros, ilha: 'natureza', fase: 'fase3',
-          faseAtual: 'NaturezaFase3', proximaFase: 'Deserto',
+          // Validação só da Natureza: volta ao Mapa (Deserto trancado). Depois, troque de volta para 'Deserto'.
+          faseAtual: 'NaturezaFase3', proximaFase: 'Map',
           personagem: 'lina', cenario: 'campo', mensagem: 'Você concluiu a Ilha da Natureza!',
         })
       }

@@ -36,7 +36,8 @@ const VOZES = {
   elefante_lina: require('../../assets/sounds/elefante_lina.mp3'),
   'maça_lina': require('../../assets/sounds/maça_lina.mp3'),
   flor_lina: require('../../assets/sounds/flor_lina.mp3'),
-  // Voz geral — nomes de ilha/fase
+  // Voz geral — nomes de mapa/ilha/fase
+  mapa_vozgeral: require('../../assets/sounds/mapa_vozgeral.mp3'),
   ilhadanatureza_vozgeral: require('../../assets/sounds/ilhadanatureza_vozgeral.mp3'),
   florestadasvogais_vozgeral: require('../../assets/sounds/florestadasvogais_vozgeral.mp3'),
   lagodasconsoantes_vozgeral: require('../../assets/sounds/lagodasconsoantes_vozgeral.mp3'),
@@ -57,6 +58,7 @@ const AudioContext = createContext({
   tocarErro: () => {},
   tocarVoz: () => {},
   tocarVozes: () => {},
+  tocarVozesEncadeado: () => {},
 });
 
 export function AudioProvider({ children }) {
@@ -77,6 +79,7 @@ export function AudioProvider({ children }) {
   const somVolRef = useRef(somVol);
   const vozVolRef = useRef(vozVol);
   const duckingRef = useRef(false);
+  const vozAtivaRef = useRef(false); // true enquanto há voz tocando/na fila
   const filaRef = useRef([]); // vozes que ainda vão tocar em sequência após a atual
   musicaRef.current = musica;
   somVolRef.current = somVol;
@@ -111,6 +114,7 @@ export function AudioProvider({ children }) {
           if (proxima) {
             reproduzirVoz(proxima); // toca a próxima da fila (mantém o ducking)
           } else {
+            vozAtivaRef.current = false;
             duckingRef.current = false;
             const m = musicaRef.current;
             if (m) { try { m.volume = volMusicaNormal(); } catch (e) {} }
@@ -182,6 +186,7 @@ export function AudioProvider({ children }) {
       player.replace(src);
       player.volume = vozVolRef.current / 100;
       player.play();
+      vozAtivaRef.current = true;
       // ducking: abaixa a música só se ela estiver ligada
       if (somVolRef.current > 0 && musicaRef.current) {
         duckingRef.current = true;
@@ -207,8 +212,24 @@ export function AudioProvider({ children }) {
     reproduzirVoz(lista[0]);
   }
 
+  // toca vozes em sequência, mas SEM cortar o que já está tocando: se já há uma
+  // voz no ar (ex.: "próxima fase" dita no resultado), enfileira estas depois
+  // dela. Usado ao entrar numa fase, pra a ordem ficar:
+  // "próxima fase" -> nome da fase -> fala do personagem.
+  function tocarVozesEncadeado(nomes) {
+    if (vozVolRef.current <= 0) return;
+    const lista = (nomes || []).filter((n) => n && VOZES[n]);
+    if (!lista.length) return;
+    if (vozAtivaRef.current) {
+      filaRef.current.push(...lista); // já tem voz tocando -> toca depois
+    } else {
+      filaRef.current = lista.slice(1);
+      reproduzirVoz(lista[0]);
+    }
+  }
+
   return (
-    <AudioContext.Provider value={{ somVol, setSomVol, vozVol, setVozVol, tocarClique, tocarAcerto, tocarErro, tocarVoz, tocarVozes }}>
+    <AudioContext.Provider value={{ somVol, setSomVol, vozVol, setVozVol, tocarClique, tocarAcerto, tocarErro, tocarVoz, tocarVozes, tocarVozesEncadeado }}>
       {/* camada que detecta qualquer toque e dispara o clique (sem bloquear o toque) */}
       <View style={{ flex: 1 }} onStartShouldSetResponderCapture={() => { tocarClique(); return false; }}>
         {children}
